@@ -36,10 +36,10 @@ export class Collection {
     */
   static keyify(ary, identifier) {
 
-    const aryMissingIDs = (ary) => !_.every(ary, (item) => item.id);
-    const aryIDsInvalid = (ary) => !_.every(ary, (item) => (_.isString(item.id) || _.isNumber(item.id)));
+    const aryMissingIDs = (ary) => !every(ary, (item) => item.id);
+    const aryIDsInvalid = (ary) => !every(ary, (item) => (isString(item.id) || isNumber(item.id)));
     const aryError      = () => {
-      console.warn('Model.keyify: Missing or invalid ID or identifier attribute in Array items', ary)
+      console.warn('keyify: Missing or invalid ID or identifier attribute in Array items', ary)
       return ary;
     };
 
@@ -49,12 +49,12 @@ export class Collection {
 
     identifier = identifier ? identifier : 'id';
 
-    return _.map(ary, (item) => {
+    return map(ary, (item) => {
       switch(typeof(identifier)) {
         case 'string':
           return identifier === 'id'
-            ? _.assign({}, item, { key: `key-${item[identifier]}` })
-            : _.assign({}, item, { key: `key-${_.at(item, identifier)[0]}` });
+            ? assign({}, item, { key: `key-${item[identifier]}` })
+            : assign({}, item, { key: `key-${at(item, identifier)[0]}` });
 
         default:
           aryError()
