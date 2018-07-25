@@ -5,7 +5,7 @@
   * Instantiate with the correct profile (endpoints map for chosen environment)
   * @param {object} profile Map of endpoints that suits your environment.
   */
-class API {
+export class API {
 
   constructor(profile) {
     if(!profile || typeof profile !== 'object') throw new TypeError('Expected profile to be an object');
@@ -101,5 +101,3 @@ class API {
     return this.URIBuilder(resource, config) +path +params;
   }
 }
-
-export default API;

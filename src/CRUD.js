@@ -2,7 +2,7 @@ import map from 'lodash/map';
 import every from 'lodash/every';
 import find from 'lodash/find';
 
-class CRUD {
+export class CRUD {
 
   constructor({ axiosInstance, sideEffects }) {
     this.axiosInstance = axiosInstance;
@@ -64,5 +64,3 @@ class CRUD {
 
   }
 }
-
-export default CRUD;

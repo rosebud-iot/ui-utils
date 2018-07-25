@@ -5,7 +5,7 @@
   * Instantiate with the correct profile (endpoints map for chosen environment)
   * @param {object} profile Map of endpoints that suits your environment.
   */
-class Images {
+export class Images {
 
   constructor(profile) {
     this.profile = profile;
@@ -35,5 +35,3 @@ class Images {
     return `${this.url('images')}/services/${category}/${serviceName}/${imageName}`.toLowerCase();
   }
 }
-
-export default Images;
