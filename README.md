@@ -6,12 +6,20 @@ Utility library shared across UI projects.
 
 ### Model utilities
 
-Static utility classes that offers methods helpful for managing data models.
-
-### Static utilities
-
-Static utility classes useful for creating URIs or paths with regards to static content.
+Static utility class that offers methods helpful for managing data models.
 
 ### Form utilities
 
-Static utility classes useful for form related tinkering.
+Static utility class useful for form related tinkering.
+
+### API utilities
+
+API utility class useful for retrieving URLs based on profile.
+
+### Image utilities
+
+Image utility class useful for retrieving image URLs based on profile.
+
+### CRUD
+
+XHR helper library, CRUD style implementation. Makes use of an Axios instance.
