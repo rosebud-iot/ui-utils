@@ -1,11 +1,11 @@
 
-/** Images
-  * Images class offers methods useful for retrieving relevant
+/** Image
+  * Image class offers methods useful for retrieving relevant
   * URIs to graphical assets managed by a CMS.
   * Instantiate with the correct profile (endpoints map for chosen environment)
   * @param {object} profile Map of endpoints that suits your environment.
   */
-export class Images {
+export class Image {
 
   constructor(profile) {
     this.profile = profile;
