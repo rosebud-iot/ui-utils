@@ -4,7 +4,10 @@ import { expect } from 'chai';
 import _ from 'lodash';
 import { CRUD } from '../src/CRUD';
 
-const axiosStub = sinon.stub();
+const axiosStub = {
+  request: sinon.stub(),
+  defaults: { headers: { common: { SWEEPR_TOKEN: 'valid-token' } } }
+};
 const crud = new CRUD({ axiosInstance: axiosStub, sideEffects: { conditions: [] } });
 
 describe('CRUD', () => {
@@ -14,7 +17,11 @@ describe('CRUD', () => {
     expect(crud).to.exist;
   })
 
-  describe('should expose all CRUD methods', () => {
+  it('should have own Axios instance', () => {
+    expect(crud.axiosInstance).to.exist;
+  });
+
+  describe('Method', () => {
 
     it('should expose CREATE method', () => {
       expect(crud.create).to.be.a('function');
@@ -34,7 +41,7 @@ describe('CRUD', () => {
 
   })
 
-  describe('should call XHR method via CRUD operations', () => {
+  describe('XHR method via CRUD operations', () => {
 
     beforeEach(() => {
       sinon.stub(crud, 'xhr');
@@ -67,6 +74,39 @@ describe('CRUD', () => {
   });
 
   describe('XHR', () => {
-    it.skip('should test the XHR method', () => {});
+
+    beforeEach(() => {
+      sinon.stub(console, 'info');
+      axiosStub.request.reset();
+    });
+
+    afterEach(() => {
+      console.info.restore();
+    });
+
+    it.skip('should throw error unless all conditions are met (sideEffects.conditions)', () => {});
+
+    it('should properly call Axios "request" method', () => {
+      const resp = {
+        request: {
+          status: 200,
+          responseURL: '/response-url'
+        },
+        status: 200,
+        data: {}
+      };
+      axiosStub.request.resolves(resp);
+      expect(axiosStub.request.called).to.be.false;
+
+      crud.xhr('/url', { a: 1 }, 'GET');
+      expect(axiosStub.request.calledOnce).to.be.true;
+      expect(axiosStub.request.calledOnceWith({
+        method: 'GET',
+        url: '/url',
+        data: { a: 1 }
+      })).to.be.true;
+    });
+
+    it.skip('should properly handle Axios request error results', () => {});
   });
-})
+});
