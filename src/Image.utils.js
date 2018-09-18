@@ -31,7 +31,7 @@ export class Image {
     * @param {string} type The image file layout.
     * @returns {string} Returns URL to service image resource (all lower case).
     */
-  service(category, service, type) {
+  service(category = '', service = '', type = '') {
     return `${this.url('images')}?domain=service&category=${category}&service=${service}&type=${type}`.toLowerCase();
   }
 
@@ -42,8 +42,8 @@ export class Image {
     * @param {string} type The image file layout.
     * @returns {string} Returns URL to service image resource (all lower case).
     */
-  device(manufacturer, family, model, type) {
-    model = model ? model.replace(/ /g, '-'): '';
+  device(manufacturer = '', family = '', model = '', type = 'square') {
+    model = model.replace(/\s/gi, '-');
     return `${this.url('images')}?domain=device&manufacturer=${manufacturer}&family=${family}&model=${model}&type=${type}`.toLowerCase();
   }
 }
