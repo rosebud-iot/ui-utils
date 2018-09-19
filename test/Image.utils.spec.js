@@ -5,6 +5,13 @@ import chaiStringHelper from './helpers/strings';
 import _ from 'lodash';
 import { Image } from '../src/Image.utils';
 
+const CMS_CONFIG = {
+  protocol: 'https',
+  domain: 'non-existing-mock-url',
+  port: '',
+  images: '/path/to'
+};
+
 chai.use(chaiStringHelper);
 
 describe('Image', () => {
@@ -12,6 +19,44 @@ describe('Image', () => {
   it('should exist', () => {
     expect(Image).to.exist;
   })
+
+  describe('Instance', () => {
+
+    let ImageInstance;
+
+    beforeEach(() => {
+      ImageInstance = new Image(CMS_CONFIG);
+    });
+
+    it('should exist', () => {
+      expect(ImageInstance).to.exist;
+    });
+
+    describe('Method service', () => {
+      it('should return expected string for correct params', () => {
+        const expectation = 'https://non-existing-mock-url/path/to?domain=service&category=a&service=b&type=squishy';
+        const response = ImageInstance.service('a', 'b', 'squishy');
+        expect(response).to.be.a('string');
+        expect(response).to.equal(expectation)
+      });
+
+      it.skip('should return string that is all lower case', () => {
+        const expectation = 'https://non-existing-mock-url/path/to?domain=service&category=nosnakecase&service=orcamelcase&type=anywhere';
+        const response = ImageInstance.service('NoSnakeCase', 'orCamelCase', 'allowed');
+        expect(response).to.be.lowercase; // TODO: implement
+        expect(response).to.equal(expectation);
+      });
+
+      it.skip('should console a warning if incorrect params, but correct param types, are given', () => {
+        const response = ImageInstance.service('', '', '');
+        // ...
+      });
+
+      it.skip('should throw and catch exception if used with params of wrong type', () => {
+        // ...
+      });
+    });
+  });
 
   describe('Method', () => {
 
