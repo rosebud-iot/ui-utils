@@ -16,16 +16,17 @@ chai.use(chaiStringHelper);
 
 describe('Image', () => {
 
-  it('should exist', () => {
-    expect(Image).to.exist;
-  })
-
   describe('Instance', () => {
 
     let ImageInstance;
 
     beforeEach(() => {
       ImageInstance = new Image(CMS_CONFIG);
+      sinon.stub(console, 'warn');
+    });
+
+    afterEach(() => {
+      console.warn.restore()
     });
 
     it('should exist', () => {
@@ -33,6 +34,7 @@ describe('Image', () => {
     });
 
     describe('Method service', () => {
+
       it('should return expected string for correct params', () => {
         const expectation = 'https://non-existing-mock-url/path/to?domain=service&category=a&service=b&type=squishy';
         const response = ImageInstance.service('a', 'b', 'squishy');
@@ -40,63 +42,47 @@ describe('Image', () => {
         expect(response).to.equal(expectation)
       });
 
-      it.skip('should return string that is all lower case', () => {
-        const expectation = 'https://non-existing-mock-url/path/to?domain=service&category=nosnakecase&service=orcamelcase&type=anywhere';
+      it('should return string that is all lower case', () => {
+        const expectation = 'https://non-existing-mock-url/path/to?domain=service&category=nosnakecase&service=orcamelcase&type=allowed';
         const response = ImageInstance.service('NoSnakeCase', 'orCamelCase', 'allowed');
-        expect(response).to.be.lowercase; // TODO: implement
+        expect(response).to.be.lowercase;
         expect(response).to.equal(expectation);
       });
 
-      it.skip('should console a warning if incorrect params, but correct param types, are given', () => {
-        const response = ImageInstance.service('', '', '');
-        // ...
-      });
-
-      it.skip('should throw and catch exception if used with params of wrong type', () => {
-        // ...
+      it('should console a warning if incorrect params, but correct param types, are given', () => {
+        ImageInstance.service('', '', '');
+        expect(console.warn.called).to.be.true;
       });
     });
+
+    describe('Method device', () => {
+
+      it('should return expected string for the correct params', () => {
+        const expectation = 'https://non-existing-mock-url/path/to?domain=device&manufacturer=a&family=b&model=c&type=squishy';
+        const response = ImageInstance.device('a', 'b', 'c', 'squishy');
+        expect(response).to.be.a('string');
+        expect(response).to.equal(expectation)
+      });
+
+      it('should return string that is all lower case', () => {
+        const expectation = 'https://non-existing-mock-url/path/to?domain=device&manufacturer=nosnakecase&family=orcamelcase&model=allowed&type=asparam';
+        const response = ImageInstance.device('NoSnakeCase', 'orCamelCase', 'allowed', 'ASPARAM');
+        expect(response).to.be.lowercase;
+        expect(response).to.equal(expectation);
+      });
+
+      it('should console a warning if incorrect params, but correct param types, are given', () => {
+        ImageInstance.device('', '', '', '');
+        expect(console.warn.called).to.be.true;
+      });
+
+      it('should replace device `model` whitespaces (if any) with dash [-]', () => {
+        const expectation = 'https://non-existing-mock-url/path/to?domain=device&manufacturer=manufacturer&family=family&model=model-name&type=type';
+        const response = ImageInstance.device('Manufacturer', 'Family', 'Model Name', 'Type');
+        expect(response).to.equal(expectation);
+      });
+
+    })
   });
 
-  describe('Method', () => {
-
-    describe('url', () => {
-      it('should exist', () => {
-        (() => new Image().url.to.exist);
-      })
-    })
-  })
-
-  describe('Method', () => {
-
-    describe('service', () => {
-      it('should exist', () => {
-        (() => new Image().service.to.exist);
-      })
-    })
-
-    /*
-    TODO: refactor this test to make be able to test
-    the `service` method output that belongs to the
-    Image class, which should be lowercase.
-    Also, add a similar test for the `device` method.
-    */
-    // describe('service', () => {
-    //   it('should return a lower case string', () => {
-    //
-    //     var stub = sinon.stub(new Image(), 'service');
-    //     expect(stub.callsFake('a', 'b', 'c')).to.not.be.uppercase
-    //
-    //   })
-    // })
-  })
-
-  describe('Method', () => {
-
-    describe('device', () => {
-      it('should exist', () => {
-        (() => new Image().device.to.exist);
-      })
-    })
-  })
 })

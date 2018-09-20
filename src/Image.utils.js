@@ -32,6 +32,9 @@ export class Image {
     * @returns {string} Returns URL to service image resource (all lower case).
     */
   service(category = '', service = '', type = '') {
+    if (category === '' || service === '' || type === '') {
+      console.warn('Service image params: Missing or invalid parameters: ', { category, service, type })
+    }
     return `${this.url('images')}?domain=service&category=${category}&service=${service}&type=${type}`.toLowerCase();
   }
 
@@ -42,8 +45,11 @@ export class Image {
     * @param {string} type The image file layout.
     * @returns {string} Returns URL to service image resource (all lower case).
     */
-  device(manufacturer = '', family = '', model = '', type = 'square') {
+  device(manufacturer = '', family = '', model = '', type = '') {
     model = model.replace(/\s/gi, '-');
+    if (manufacturer === '', family === '', model === '', type === '') {
+      console.warn('Device image params: Missing or invalid parameters: ', { manufacturer, family, model, type })
+    }
     return `${this.url('images')}?domain=device&manufacturer=${manufacturer}&family=${family}&model=${model}&type=${type}`.toLowerCase();
   }
 }
