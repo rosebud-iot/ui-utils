@@ -47,7 +47,7 @@ export class Image {
     */
   device(manufacturer = '', family = '', model = '', type = '') {
     model = model.replace(/\s/gi, '-');
-    if (manufacturer === '', family === '', model === '', type === '') {
+    if (manufacturer === '' || family === '' || model === '' || type === '') {
       console.warn('Device image params: Missing or invalid parameters: ', { manufacturer, family, model, type })
     }
     return `${this.url('images')}?domain=device&manufacturer=${manufacturer}&family=${family}&model=${model}&type=${type}`.toLowerCase();
