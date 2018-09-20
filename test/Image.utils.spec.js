@@ -22,11 +22,6 @@ describe('Image', () => {
 
     beforeEach(() => {
       ImageInstance = new Image(CMS_CONFIG);
-      sinon.stub(console, 'warn');
-    });
-
-    afterEach(() => {
-      console.warn.restore()
     });
 
     it('should exist', () => {
@@ -45,13 +40,23 @@ describe('Image', () => {
       it('should return string that is all lower case', () => {
         const expectation = 'https://non-existing-mock-url/path/to?domain=service&category=nosnakecase&service=orcamelcase&type=allowed';
         const response = ImageInstance.service('NoSnakeCase', 'orCamelCase', 'allowed');
-        expect(response).to.be.lowercase;
+        expect(response).to.be.all_lowercase;
         expect(response).to.equal(expectation);
       });
 
-      it('should console a warning if incorrect params, but correct param types, are given', () => {
-        ImageInstance.service('', '', '');
-        expect(console.warn.called).to.be.true;
+      it('should throw a type error if incorrect param types are given', () => {
+        const inputParams = [
+          { 'service': '', 'category': '', 'type': '' },
+          { 'service': null, 'category': null, 'type': null },
+          { 'service': undefined, 'category': undefined, 'type': undefined },
+          { 'service': '', 'category': null, 'type': '' }
+        ];
+
+        _.map(inputParams, (params) => {
+          expect(() => {
+            ImageInstance.service(Object.values(params));
+          }).to.throw(TypeError)
+        })
       });
     });
 
@@ -67,13 +72,24 @@ describe('Image', () => {
       it('should return string that is all lower case', () => {
         const expectation = 'https://non-existing-mock-url/path/to?domain=device&manufacturer=nosnakecase&family=orcamelcase&model=allowed&type=asparam';
         const response = ImageInstance.device('NoSnakeCase', 'orCamelCase', 'allowed', 'ASPARAM');
-        expect(response).to.be.lowercase;
+        expect(response).to.be.all_lowercase;
         expect(response).to.equal(expectation);
       });
 
-      it('should console a warning if incorrect params, but correct param types, are given', () => {
-        ImageInstance.device('', '', '', '');
-        expect(console.warn.called).to.be.true;
+      it('should throw a type error if incorrect param types are given', () => {
+        const inputParams = [
+          { 'manufacturer': '', 'family': '', 'model': '', 'type': '' },
+          { 'manufacturer': 'manufacturer', 'family': 'manufacturer', 'model': 'manufacturer', 'type': 'manufacturer' },
+          { 'manufacturer': null, 'family': null, 'model': null, 'type': null },
+          { 'manufacturer': undefined, 'family': undefined, 'model': undefined, 'type': undefined },
+          { 'manufacturer': '', 'family': null, 'model': 'model name', 'type': '' }
+        ];
+
+        _.map(inputParams, (params) => {
+          expect(() => {
+            ImageInstance.device(Object.values(params));
+          }).to.throw(TypeError)
+        })
       });
 
       it('should replace device `model` whitespaces (if any) with dash [-]', () => {

@@ -1,7 +1,7 @@
 import chai, { assert } from 'chai';
 
 module.exports = function (chai, _) {
-  chai.Assertion.addProperty('lowercase', function () {
+  chai.Assertion.addProperty('all_lowercase', function () {
     var obj = this._obj;
     new chai.Assertion(obj).to.be.a('string');
 
@@ -12,12 +12,12 @@ module.exports = function (chai, _) {
     );
   });
 
-  // Usage of `lowercase` helper
-  // expect('hello').to.be.lowercase; // pass
-  // expect('HELLO').to.not.be.lowercase; // pass
-  // expect('HELLo').to.be.lowercase; // fail
+  // Usage of `all_lowercase` helper
+  // expect('hello').to.be.all_lowercase; // pass
+  // expect('HELLO').to.not.be.all_lowercase; // pass
+  // expect('HELLo').to.be.all_lowercase; // fail
 
-  chai.Assertion.addProperty('uppercase', function () {
+  chai.Assertion.addProperty('all_uppercase', function () {
     var obj = this._obj;
     new chai.Assertion(obj).to.be.a('string');
 
@@ -28,8 +28,8 @@ module.exports = function (chai, _) {
     );
   });
 
-  // Usage of `uppercase` helper
-  // expect('HELLO').to.be.uppercase; // pass
-  // expect('hello').to.not.be.uppercase; // pass
-  // expect('HELLo').to.be.uppercase; // fail
+  // Usage of `all_uppercase` helper
+  // expect('HELLO').to.be.all_uppercase; // pass
+  // expect('hello').to.not.be.all_uppercase; // pass
+  // expect('HELLo').to.be.all_uppercase; // fail
 };
