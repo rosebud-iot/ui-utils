@@ -1,3 +1,5 @@
+import every from 'lodash/every';
+import isString from 'lodash/isString';
 
 /** Image
   * Image class offers methods useful for retrieving relevant
@@ -11,6 +13,7 @@ export class Image {
     this.profile = profile;
     this.url = this.url.bind(this);
     this.service = this.service.bind(this);
+    this.device = this.device.bind(this);
   }
 
   /** url
@@ -27,11 +30,24 @@ export class Image {
 
   /** service
     * @param {string} category The category in which desired service image resides.
-    * @param {string} serviceName The name of the service.
-    * @param {string} imageName The filename of the service image.
+    * @param {string} service The name of the service.
+    * @param {string} type The image file layout.
     * @returns {string} Returns URL to service image resource (all lower case).
     */
-  service(category, serviceName, imageName) {
-    return `${this.url('images')}/services/${category}/${serviceName}/${imageName}`.toLowerCase();
+  service(category = '', service = '', type = '') {
+    if (!every(arguments, isString)) throw new TypeError(`Expected string, but got ${typeof arguments}`);
+    return `${this.url('images')}?domain=service&category=${category}&service=${service}&type=${type}`.toLowerCase();
+  }
+
+  /** device
+    * @param {string} manufacturer The category in which desired device image resides.
+    * @param {string} family Device family.
+    * @param {string} model Device model.
+    * @param {string} type The image file layout.
+    * @returns {string} Returns URL to service image resource (all lower case).
+    */
+  device(manufacturer = '', family = '', model = '', type = '') {
+    if (!every(arguments, isString)) throw new TypeError(`Expected string, but got ${typeof arguments}`);
+    return `${this.url('images')}?domain=device&manufacturer=${manufacturer}&family=${family}&model=${model.replace(/\s/gi, '-')}&type=${type}`.toLowerCase()
   }
 }
