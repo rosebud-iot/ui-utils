@@ -34,7 +34,7 @@ describe('Image', () => {
         const expectation = 'https://non-existing-mock-url/path/to?domain=service&category=a&service=b&type=squishy';
         const response = ImageInstance.service('a', 'b', 'squishy');
         expect(response).to.be.a('string');
-        expect(response).to.equal(expectation)
+        expect(response).to.equal(expectation);
       });
 
       it('should return string that is all lower case', () => {
@@ -55,7 +55,7 @@ describe('Image', () => {
         _.map(inputParams, (params) => {
           expect(() => {
             ImageInstance.service(Object.values(params));
-          }).to.throw(TypeError)
+          }).to.throw(TypeError);
         })
       });
     });
@@ -66,7 +66,7 @@ describe('Image', () => {
         const expectation = 'https://non-existing-mock-url/path/to?domain=device&manufacturer=a&family=b&model=c&type=squishy';
         const response = ImageInstance.device('a', 'b', 'c', 'squishy');
         expect(response).to.be.a('string');
-        expect(response).to.equal(expectation)
+        expect(response).to.equal(expectation);
       });
 
       it('should return string that is all lower case', () => {
@@ -88,7 +88,7 @@ describe('Image', () => {
         _.map(inputParams, (params) => {
           expect(() => {
             ImageInstance.device(Object.values(params));
-          }).to.throw(TypeError)
+          }).to.throw(TypeError);
         })
       });
 
