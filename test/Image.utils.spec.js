@@ -92,9 +92,9 @@ describe('Image', () => {
         })
       });
 
-      it('should replace device `model` whitespaces (if any) with dash [-]', () => {
-        const expectation = 'https://non-existing-mock-url/path/to?domain=device&manufacturer=manufacturer&family=family&model=model-name&type=type';
-        const response = ImageInstance.device('Manufacturer', 'Family', 'Model Name', 'Type');
+      it('should replace params whitespaces (if any) with dash [-]', () => {
+        const expectation = 'https://non-existing-mock-url/path/to?domain=device&manufacturer=manufacturer&family=some-family-name&model=model-name&type=type';
+        const response = ImageInstance.device('Manufacturer', 'Some Family Name', 'Model Name', 'Type');
         expect(response).to.equal(expectation);
       });
 

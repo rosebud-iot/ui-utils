@@ -1,5 +1,6 @@
-import every from 'lodash/every';
+import some from 'lodash/some';
 import isString from 'lodash/isString';
+import isEmpty from 'lodash/isEmpty';
 
 /** Image
   * Image class offers methods useful for retrieving relevant
@@ -35,8 +36,10 @@ export class Image {
     * @returns {string} Returns URL to service image resource (all lower case).
     */
   service(category = '', service = '', type = '') {
-    if (!every(arguments, isString)) throw new TypeError(`Expected string, but got ${typeof arguments}`);
-    return `${this.url('images')}?domain=service&category=${category}&service=${service}&type=${type}`.toLowerCase();
+    if (!some(arguments, isString)) throw new TypeError(`Expected string, but got ${typeof arguments}`);
+    const _category = !isEmpty(category) ? `&category=${category}` : '';
+    const _service = !isEmpty(service) ? `&service=${service}` : '';
+    return `${this.url('images')}?domain=service${_category}${_service}&type=${type}`.replace(/\s/gi, '-').toLowerCase();
   }
 
   /** device
@@ -44,10 +47,13 @@ export class Image {
     * @param {string} family Device family.
     * @param {string} model Device model.
     * @param {string} type The image file layout.
-    * @returns {string} Returns URL to service image resource (all lower case).
+    * @returns {string} Returns URL to service image resource (all lower case, all whitespaces replaced with dash).
     */
   device(manufacturer = '', family = '', model = '', type = '') {
-    if (!every(arguments, isString)) throw new TypeError(`Expected string, but got ${typeof arguments}`);
-    return `${this.url('images')}?domain=device&manufacturer=${manufacturer}&family=${family}&model=${model.replace(/\s/gi, '-')}&type=${type}`.toLowerCase()
+    if (!some(arguments, isString)) throw new TypeError(`Expected string, but got ${typeof arguments}`);
+    const _manufacturer = !isEmpty(manufacturer) ? `&manufacturer=${manufacturer}` : '';
+    const _family = !isEmpty(family) ? `&family=${family}` : '';
+    const _model = !isEmpty(model) ? `&model=${model}` : '';
+    return `${this.url('images')}?domain=device${_manufacturer}${_family}${_model}&type=${type}`.replace(/\s/gi, '-').toLowerCase()
   }
 }
