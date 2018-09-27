@@ -1,5 +1,7 @@
 import every from 'lodash/every';
 import isString from 'lodash/isString';
+import pickBy from 'lodash/pickBy';
+import assign from 'lodash/assign';
 
 /** Image
   * Image class offers methods useful for retrieving relevant
@@ -12,6 +14,8 @@ export class Image {
   constructor(profile) {
     this.profile = profile;
     this.url = this.url.bind(this);
+    this.parameterize = this.parameterize.bind(this);
+    this.imageUrlBuilder = this.imageUrlBuilder.bind(this);
     this.service = this.service.bind(this);
     this.device = this.device.bind(this);
   }
@@ -28,26 +32,55 @@ export class Image {
            o[path];
   }
 
-  /** service
-    * @param {string} category The category in which desired service image resides.
-    * @param {string} service The name of the service.
-    * @param {string} type The image file layout.
-    * @returns {string} Returns URL to service image resource (all lower case).
+  /** parameterize, duplicated from API.utils
+    * Parameterizes an object into a string suitable for URLs.
+    * @param {object} obj The object to parameterize.
+    * @returns {string} Returns the parameterized string.
     */
-  service(category = '', service = '', type = '') {
-    if (!every(arguments, isString)) throw new TypeError(`Expected string, but got ${typeof arguments}`);
-    return `${this.url('images')}?domain=service&category=${category}&service=${service}&type=${type}`.toLowerCase();
+  parameterize(obj) {
+    let params = '?';
+    for (let key in obj) {
+      params.charAt(params.length -1) === '?'
+        ? params = params +key +'=' +obj[key]
+        : params = params +'&' +key +'=' +obj[key];
+    }
+    return params;
+  }
+
+
+  /** imageUrlBuilder
+    * @param {string} imageDomain The domain that corresponds to devices or services.
+    * @param {string} requiredParam Critical param required to have the possibility to
+    * retrieve a default image from the CSM (devices->manufacturer, service->category).
+    * @param {object} paramsObject Params object provided to the Image instance.
+    * @returns {string} Returns image URL.
+    */
+  imageUrlBuilder(imageDomain, requiredParam, paramsObject) {
+    try {
+      const stringParams = pickBy(paramsObject, isString);
+      if(!stringParams[requiredParam] && every(stringParams, isString)) {
+        throw new TypeError('Missing required params or wrong types');
+      }
+      const p = this.parameterize(assign({ domain: imageDomain }, stringParams));
+      return `${this.url('images')}${p}`.replace(/\s/gi, '-').toLowerCase();
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
+  /** service
+    * @param {object} params Service params used to fetch the corresponding image.
+    * @returns {string} Returns URL to service image resource.
+    */
+  service(params) {
+    return this.imageUrlBuilder('service', 'category', params);
   }
 
   /** device
-    * @param {string} manufacturer The category in which desired device image resides.
-    * @param {string} family Device family.
-    * @param {string} model Device model.
-    * @param {string} type The image file layout.
-    * @returns {string} Returns URL to service image resource (all lower case).
+    * @param {object} params Device params used to fetch the corresponding image.
+    * @returns {string} Returns URL to service image resource.
     */
-  device(manufacturer = '', family = '', model = '', type = '') {
-    if (!every(arguments, isString)) throw new TypeError(`Expected string, but got ${typeof arguments}`);
-    return `${this.url('images')}?domain=device&manufacturer=${manufacturer}&family=${family}&model=${model.replace(/\s/gi, '-')}&type=${type}`.toLowerCase()
+  device(params) {
+    return this.imageUrlBuilder('device', 'manufacturer', params);
   }
 }
