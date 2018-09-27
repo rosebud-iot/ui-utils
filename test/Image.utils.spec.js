@@ -62,7 +62,6 @@ describe('Image', () => {
           type: 'allowed'
         }
         const response = ImageInstance.service(params);
-        console.log(response)
         expect(response).to.equal(expectation);
       });
     });
@@ -104,7 +103,6 @@ describe('Image', () => {
           type: 'ASPARAM'
         }
         const response = ImageInstance.device(params);
-        console.log(response)
         expect(response).to.equal(expectation);
       });
 

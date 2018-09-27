@@ -15,6 +15,7 @@ export class Image {
     this.profile = profile;
     this.url = this.url.bind(this);
     this.parameterize = this.parameterize.bind(this);
+    this.imageUrlBuilder = this.imageUrlBuilder.bind(this);
     this.service = this.service.bind(this);
     this.device = this.device.bind(this);
   }
@@ -46,38 +47,40 @@ export class Image {
     return params;
   }
 
-  /** getLocalAsset
-    * Provides a default image for devices that are missing manufacturer property
+
+  /** imageUrlBuilder
+    * @param {string} [imageDomain] The domain that corresponds to devices or services.
+    * @param {string} [requiredParam] Critical param required to have the possibility to
+    * retrieve a default image from the CSM (devices->manufacturer, service->category).
+    * @param {object} [paramsObject] Params object provided to the Image instance.
+    * @returns {string} Returns image URL.
     */
-  getLocalAsset() {
-    return '../../../../images/brand/basic/sweeprlogo.png'
+  imageUrlBuilder(imageDomain, requiredParam, paramsObject) {
+    try {
+      const stringParams = pickBy(paramsObject, isString);
+      if(!stringParams[requiredParam] && every(stringParams, isString)) {
+        throw new TypeError('Missing required params or wrong types');
+      }
+      const p = this.parameterize(assign({ domain: imageDomain }, stringParams));
+      return `${this.url('images')}${p}`.replace(/\s/gi, '-').toLowerCase();
+    } catch (e) {
+      console.warn(e);
+    }
   }
 
   /** service
-    * @param {string} category The category in which desired service image resides.
-    * @param {string} service The name of the service.
-    * @param {string} type The image file layout.
-    * @returns {string} Returns URL to service image resource (all lower case).
+    * @param {object} params Service params used to fetch the corresponding image.
+    * @returns {string} Returns URL to service image resource.
     */
   service(params) {
-    if (!params || !params.category) return;
-    const existingParams = pickBy(params, isString);
-    if (!existingParams.category && every(existingParams, isString)) throw new TypeError('Missing required params or wrong types');
-    return `${this.url('images')}${this.parameterize(assign({}, { domain: 'service' }, existingParams))}`.replace(/\s/gi, '-').toLowerCase();
+    return this.imageUrlBuilder('service', 'category', params);
   }
 
   /** device
-    * @param {string} manufacturer The category in which desired device image resides.
-    * @param {string} family Device family.
-    * @param {string} model Device model.
-    * @param {string} type The image file layout.
-    * @returns {string} Returns URL to service image resource (all lower case, all whitespaces replaced with dash).
+    * @param {object} params Device params used to fetch the corresponding image.
+    * @returns {string} Returns URL to service image resource.
     */
   device(params) {
-    if (!params || !params.manufacturer) return;
-    if (params.manufacturer === 'Other') return this.getLocalAsset();
-    const existingParams = pickBy(params, isString);
-    if (!existingParams.manufacturer && every(existingParams, isString)) throw new TypeError('Missing required params or wrong types');
-    return `${this.url('images')}${this.parameterize(assign({}, { domain: 'device' }, existingParams))}`.replace(/\s/gi, '-').toLowerCase();
+    return this.imageUrlBuilder('device', 'manufacturer', params);
   }
 }
