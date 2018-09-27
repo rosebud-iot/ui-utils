@@ -49,10 +49,10 @@ export class Image {
 
 
   /** imageUrlBuilder
-    * @param {string} [imageDomain] The domain that corresponds to devices or services.
-    * @param {string} [requiredParam] Critical param required to have the possibility to
+    * @param {string} imageDomain The domain that corresponds to devices or services.
+    * @param {string} requiredParam Critical param required to have the possibility to
     * retrieve a default image from the CSM (devices->manufacturer, service->category).
-    * @param {object} [paramsObject] Params object provided to the Image instance.
+    * @param {object} paramsObject Params object provided to the Image instance.
     * @returns {string} Returns image URL.
     */
   imageUrlBuilder(imageDomain, requiredParam, paramsObject) {
