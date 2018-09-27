@@ -1,6 +1,7 @@
-import some from 'lodash/some';
+import every from 'lodash/every';
 import isString from 'lodash/isString';
-import isEmpty from 'lodash/isEmpty';
+import pickBy from 'lodash/pickBy';
+import assign from 'lodash/assign';
 
 /** Image
   * Image class offers methods useful for retrieving relevant
@@ -13,6 +14,7 @@ export class Image {
   constructor(profile) {
     this.profile = profile;
     this.url = this.url.bind(this);
+    this.parameterize = this.parameterize.bind(this);
     this.service = this.service.bind(this);
     this.device = this.device.bind(this);
   }
@@ -29,17 +31,39 @@ export class Image {
            o[path];
   }
 
+  /** parameterize, duplicated from API.utils
+    * Parameterizes an object into a string suitable for URLs.
+    * @param {object} obj The object to parameterize.
+    * @returns {string} Returns the parameterized string.
+    */
+  parameterize(obj) {
+    let params = '?';
+    for (let key in obj) {
+      params.charAt(params.length -1) === '?'
+        ? params = params +key +'=' +obj[key]
+        : params = params +'&' +key +'=' +obj[key];
+    }
+    return params;
+  }
+
+  /** getLocalAsset
+    * Provides a default image for devices that are missing manufacturer property
+    */
+  getLocalAsset() {
+    return '../../../../images/brand/basic/sweeprlogo.png'
+  }
+
   /** service
     * @param {string} category The category in which desired service image resides.
     * @param {string} service The name of the service.
     * @param {string} type The image file layout.
     * @returns {string} Returns URL to service image resource (all lower case).
     */
-  service(category = '', service = '', type = '') {
-    if (!some(arguments, isString)) throw new TypeError(`Expected string, but got ${typeof arguments}`);
-    const _category = !isEmpty(category) ? `&category=${category}` : '';
-    const _service = !isEmpty(service) ? `&service=${service}` : '';
-    return `${this.url('images')}?domain=service${_category}${_service}&type=${type}`.replace(/\s/gi, '-').toLowerCase();
+  service(params) {
+    if (!params || !params.category) return;
+    const existingParams = pickBy(params, isString);
+    if (!existingParams.category && every(existingParams, isString)) throw new TypeError('Missing required params or wrong types');
+    return `${this.url('images')}${this.parameterize(assign({}, { domain: 'service' }, existingParams))}`.replace(/\s/gi, '-').toLowerCase();
   }
 
   /** device
@@ -49,11 +73,11 @@ export class Image {
     * @param {string} type The image file layout.
     * @returns {string} Returns URL to service image resource (all lower case, all whitespaces replaced with dash).
     */
-  device(manufacturer = '', family = '', model = '', type = '') {
-    if (!some(arguments, isString)) throw new TypeError(`Expected string, but got ${typeof arguments}`);
-    const _manufacturer = !isEmpty(manufacturer) ? `&manufacturer=${manufacturer}` : '';
-    const _family = !isEmpty(family) ? `&family=${family}` : '';
-    const _model = !isEmpty(model) ? `&model=${model}` : '';
-    return `${this.url('images')}?domain=device${_manufacturer}${_family}${_model}&type=${type}`.replace(/\s/gi, '-').toLowerCase()
+  device(params) {
+    if (!params || !params.manufacturer) return;
+    if (params.manufacturer === 'Other') return this.getLocalAsset();
+    const existingParams = pickBy(params, isString);
+    if (!existingParams.manufacturer && every(existingParams, isString)) throw new TypeError('Missing required params or wrong types');
+    return `${this.url('images')}${this.parameterize(assign({}, { domain: 'device' }, existingParams))}`.replace(/\s/gi, '-').toLowerCase();
   }
 }
