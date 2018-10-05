@@ -2,6 +2,8 @@
 
 Utility library shared across UI projects.
 
+Version `1.0.0`
+
 ## Contents
 
 ### Model utilities
