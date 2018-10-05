@@ -3,7 +3,7 @@
   "version": "0.0.7",
   "description": "Utility library shared across React platforms",
   "main": "index.js",
-  "dependencies": {
+  "peerDependencies": {
     "lodash": "^4.17.11"
   },
   "devDependencies": {
