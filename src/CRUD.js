@@ -57,8 +57,15 @@ export class CRUD {
 
       }
     }).catch((error) => {
-      console.info(error);
-      return error.response.data;
+      switch(error.response.status) {
+        case 400: // Bad Request
+        case 404: // Not found
+          console.warning(error);
+          break;
+
+        default:
+          throw new RangeError(`Unhandled response ${error.response.status}, not within accepted range`);
+      }
     });
   }
 }
