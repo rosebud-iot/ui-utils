@@ -24,10 +24,6 @@ export class CRUD {
     return this.xhr(url, null, 'DELETE');
   }
 
-  handleException(message) {
-   this.message = message;
-  }
-
   async xhr(url, body, verb) {
     // TODO: handle these checks in an interceptor instead.
     const auth = /\/register|\/login/gi.test(url);
@@ -61,7 +57,9 @@ export class CRUD {
 
       }
     }).catch((error) => {
-      throw new this.handleException(error.response.data.message);
+      throw new (function() {
+        this.message = error.response.data.message;
+      })();
     });
   }
 }
