@@ -107,6 +107,24 @@ describe('CRUD', () => {
       })).to.be.true;
     });
 
+    it.skip('should properly handle error responses', () => {
+      const errorResponse = {
+        response: {
+          request: {
+            status: 404,
+            responseURL: '/response-url'
+          },
+          status: 404,
+          data: {
+            message: "The rule with ID '123' does not exists."
+          }
+        }
+      };
+
+      crud.xhr('/url', { a: 1 }, 'GET');
+      expect(() => axiosStub.request.resolves(errorResponse)).to.throw(Error);
+    });
+
     it.skip('should properly handle Axios request error results', () => {});
   });
 });
