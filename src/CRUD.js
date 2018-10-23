@@ -57,8 +57,9 @@ export class CRUD {
 
       }
     }).catch((error) => {
-      console.info(error);
-      return error.response.data;
+      throw new (function() {
+        this.message = error.response.data.message;
+      })();
     });
   }
 }
