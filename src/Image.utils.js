@@ -18,6 +18,7 @@ export class Image {
     this.imageUrlBuilder = this.imageUrlBuilder.bind(this);
     this.service = this.service.bind(this);
     this.device = this.device.bind(this);
+    this.imageHash = this.imageHash.bind(this);
   }
 
   /** url
@@ -91,7 +92,7 @@ export class Image {
   imageHash(hash, type='thumbnail') {
     try {
       if (!hash) throw new TypeError('Missing URL hash');
-      return `${this.url('images')}?domain=device&${hash}&${type}`;
+      return `${this.url('images')}?domain=device&${hash}&type=${type}`;
     } catch (e) {
       console.warn(e);
     }
