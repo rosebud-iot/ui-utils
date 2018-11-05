@@ -83,4 +83,17 @@ export class Image {
   device(params) {
     return this.imageUrlBuilder('device', 'manufacturer', params);
   }
+
+  /** Retrieve both categories of images when the URL hash is already built.
+    * @param {string} hash Image URL hash used to fetch the corresponding image.
+    * @returns {string} Returns URL to service image resource.
+    */
+  imageHash(hash, type='thumbnail') {
+    try {
+      if (!hash) throw new TypeError('Missing URL hash');
+      return `${this.url('images')}?domain=device&${hash}&${type}`;
+    } catch (e) {
+      console.warn(e);
+    }
+  }
 }
