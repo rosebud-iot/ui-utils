@@ -87,12 +87,13 @@ export class Image {
 
   /** Retrieve both categories of images when the URL hash is already built.
     * @param {string} hash Image URL hash used to fetch the corresponding image.
+    * @param {string} [type] Specifies the image type (thumbnail, square etc).
     * @returns {string} Returns URL to service image resource.
     */
   imageHash(hash, type='thumbnail') {
     try {
       if (!hash) throw new TypeError('Missing URL hash');
-      return `${this.url('images')}?domain=device&${hash}&type=${type}`;
+      return `${this.url('images')}?${hash}&type=${type}`;
     } catch (e) {
       console.warn(e);
     }
