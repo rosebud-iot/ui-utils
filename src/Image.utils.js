@@ -18,7 +18,7 @@ export class Image {
     this.imageUrlBuilder = this.imageUrlBuilder.bind(this);
     this.service = this.service.bind(this);
     this.device = this.device.bind(this);
-    this.imageHash = this.imageHash.bind(this);
+    this.imageURLWithParams = this.imageURLWithParams.bind(this);
   }
 
   /** url
@@ -85,15 +85,18 @@ export class Image {
     return this.imageUrlBuilder('device', 'manufacturer', params);
   }
 
-  /** Retrieve both categories of images when the URL hash is already built.
-    * @param {string} hash Image URL hash used to fetch the corresponding image.
+  /** imageURLWithParams
+    * Retrieve both categories of images when the URL params string is already built.
+    * @param {string} params string Image URL params string used to fetch the corresponding image.
     * @param {string} [type] Specifies the image type (thumbnail, square etc).
     * @returns {string} Returns URL to service image resource.
     */
-  imageHash(hash, type='thumbnail') {
+  imageURLWithParams(paramsString, type='thumbnail') {
     try {
-      if (!hash) throw new TypeError('Missing URL hash');
-      return `${this.url('images')}?${hash}&type=${type}`;
+      if (!paramsString || typeof paramsString !== 'string') {
+        throw new TypeError('Missing URL paramsString, empty or not a string');
+      }
+      return `${this.url('images')}?${paramsString}&type=${type}`;
     } catch (e) {
       console.warn(e);
     }
