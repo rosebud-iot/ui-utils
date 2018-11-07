@@ -120,6 +120,8 @@ describe('Image', () => {
     })
 
     describe('Method imageURLWithParams', () => {
+      const expectation = 'https://non-existing-mock-url/path/to?domain=a&manufacturer=b&family=c&type=thumbnail';
+      const paramsString = 'domain=a&manufacturer=b&family=c';
 
       beforeEach(() => {
         sinon.stub(console, 'warn')
@@ -127,14 +129,6 @@ describe('Image', () => {
 
       afterEach(() => {
         console.warn.restore()
-      })
-
-      // Skipped test. Can't catch both the warning and the thrown TypeError with the current implementation.
-      it.skip('should throw TypeError if required `paramsString` param is missing or provided empty', () => {
-        const errorParamsStrings = ['', [], undefined, null, false, true];
-        _.each(errorParamsStrings, (param) => {
-          expect(() => ImageInstance.imageURLWithParams(param)).to.throw(TypeError, 'Missing URL paramsString, empty or not a string');
-        });
       })
 
       it('should log an error if required `paramsString` param is missing or provided empty', () => {
@@ -146,11 +140,17 @@ describe('Image', () => {
       });
 
       it('should return expected string for the correct params', () => {
-        const expectation = 'https://non-existing-mock-url/path/to?domain=a&manufacturer=b&family=c&type=thumbnail';
-        const paramsString = 'domain=a&manufacturer=b&family=c';
         const response = ImageInstance.imageURLWithParams(paramsString);
         expect(response).to.be.a('string');
         expect(response).to.equal(expectation);
+      });
+
+      it('should call `url` method with a certain parameter', () => {
+        sinon.stub(ImageInstance, 'url');
+        expect(ImageInstance.url.called).to.be.false;
+        ImageInstance.imageURLWithParams(paramsString);
+        expect(ImageInstance.url.called).to.be.true;
+        ImageInstance.url.reset();
       });
 
     })
