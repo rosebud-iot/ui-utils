@@ -136,6 +136,7 @@ describe('Image', () => {
         _.each(errorParamsStrings, (param) => {
           ImageInstance.imageURLWithParams(param);
           expect(console.warn.called).to.be.true;
+          expect(console.warn.callCount).to.equal(errorParamsStrings.indexOf(param) + 1);
         });
       });
 
@@ -145,7 +146,7 @@ describe('Image', () => {
         expect(response).to.equal(expectation);
       });
 
-      it('should call `url` method with a certain parameter', () => {
+      it('should call `url` method', () => {
         sinon.stub(ImageInstance, 'url');
         expect(ImageInstance.url.called).to.be.false;
         ImageInstance.imageURLWithParams(paramsString);
