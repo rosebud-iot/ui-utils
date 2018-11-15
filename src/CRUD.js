@@ -28,38 +28,41 @@ export class CRUD {
     // TODO: handle these checks in an interceptor instead.
     const auth = /\/register|\/login/gi.test(url);
     const conditionsResult = map(this.sideEffects.conditions, (fn) => {
-      return fn({ auth, token: this.axiosInstance.defaults.headers.common['SWEEPR-TOKEN'] });
+      return fn({ auth, token: this.axiosInstance.defaults.headers.common['Authorization'] });
     });
     const allConditionsMet = every(conditionsResult, (res) => res.response);
 
-    if(!allConditionsMet) {
+    if (!allConditionsMet) {
       const unmetCondition = find(conditionsResult, ['response', false]);
       throw new Error(`Condition unmet ${unmetCondition.msg}`);
     }
 
-    return this.axiosInstance.request({
-      method: verb,
-      url,
-      data: body || null
-    }).then((response) => {
-      console.info(`${verb}:`, response.request.status, `-> ${response.request.responseURL}`);
-      switch(response.status) {
+    return this.axiosInstance
+      .request({
+        method: verb,
+        url,
+        data: body || null
+      })
+      .then((response) => {
+        console.info(`${verb}:`, response.request.status, `-> ${response.request.responseURL}`);
+        switch (response.status) {
+          case 200: // OK
+          case 201: // Created
+          case 202: // Accepted
+          case 203: // Non-Authoritative Information
+          case 204: // No content
+            return response.data;
 
-        case 200: // OK
-        case 201: // Created
-        case 202: // Accepted
-        case 203: // Non-Authoritative Information
-        case 204: // No content
-          return response.data;
-
-        default:
-          throw new RangeError(`Unhandled response ${response.status}, not within accepted range`);
-
-      }
-    }).catch((error) => {
-      throw new (function() {
-        this.message = error.response.data.message;
-      })();
-    });
+          default:
+            throw new RangeError(
+              `Unhandled response ${response.status}, not within accepted range`
+            );
+        }
+      })
+      .catch((error) => {
+        throw new function() {
+          this.message = error.response.data.message;
+        }();
+      });
   }
 }
