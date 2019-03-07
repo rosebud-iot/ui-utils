@@ -26,7 +26,7 @@ export class CRUD {
 
   async xhr(url, body, verb) {
     // TODO: handle these checks in an interceptor instead.
-    const auth = /\/register|\/login/gi.test(url);
+    const auth = /\/register|\/login|\/oauth\/token/gi.test(url);
     const conditionsResult = map(this.sideEffects.conditions, (fn) => {
       return fn({ auth, token: this.axiosInstance.defaults.headers.common['Authorization'] });
     });
