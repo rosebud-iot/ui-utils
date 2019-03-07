@@ -30,10 +30,10 @@ export class CRUD {
     const conditionsResult = map(this.sideEffects.conditions, (fn) => {
       return fn({ auth, token: this.axiosInstance.defaults.headers.common['Authorization'] });
     });
-    const allConditionsMet = every(conditionsResult, (res) => res.response);
 
+    const allConditionsMet = every(conditionsResult, (res) => res.response);
     if (!allConditionsMet) {
-      const unmetCondition = find(conditionsResult, ['response', false]);
+      const unmetCondition = find(conditionsResult, (r) => !r.response);
       throw new Error(`Condition unmet ${unmetCondition.msg}`);
     }
 
