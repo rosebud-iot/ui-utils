@@ -25,10 +25,8 @@ export class CRUD {
   }
 
   async xhr(url, body, verb) {
-    // TODO: handle these checks in an interceptor instead.
-    const auth = /\/register|\/login|\/oauth\/token/gi.test(url);
     const conditionsResult = map(this.sideEffects.conditions, (fn) => {
-      return fn({ auth, token: this.axiosInstance.defaults.headers.common['Authorization'] });
+      return fn({ auth_token: this.axiosInstance.defaults.headers.common['Authorization'] });
     });
 
     const allConditionsMet = every(conditionsResult, (res) => res.response);
@@ -61,7 +59,7 @@ export class CRUD {
       })
       .catch((error) => {
         throw new function() {
-          this.message = error.response.data.message;
+          if (error.response && error.response.data) this.message = error.response.data.message;
         }();
       });
   }
