@@ -2,6 +2,16 @@ import map from 'lodash/map';
 import every from 'lodash/every';
 import find from 'lodash/find';
 
+export class RequestError extends Error {
+  constructor({ name = 'XHR request error', message, code, devMessage }) {
+    super();
+    this.name = name;
+    this.message = message;
+    this.code = code;
+    this.devMessage = devMessage;
+  }
+}
+
 export class CRUD {
   constructor({ axiosInstance, sideEffects }) {
     this.axiosInstance = axiosInstance;
@@ -58,9 +68,17 @@ export class CRUD {
         }
       })
       .catch((error) => {
-        throw new function() {
-          if (error.response && error.response.data) this.message = error.response.data.message;
-        }();
+        if (error.response && error.response.data && error.request) {
+          throw new RequestError({
+            message: error.response.data.error,
+            devMessage: error.response.data.error_description,
+            code: error.request.status
+          });
+        } else {
+          console.warn('Request response format invalid (could not create readable error)', {
+            ...error
+          });
+        }
       });
   }
 }
