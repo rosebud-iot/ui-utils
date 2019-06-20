@@ -2,7 +2,7 @@
   "name": "ui-utils",
   "version": "1.0.0",
   "description": "Utility library shared across React platforms",
-  "main": "index.js",
+  "main": "dist/index.js",
   "peerDependencies": {
     "lodash": "^4.17.11"
   },
