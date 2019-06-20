@@ -1,13 +1,15 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.requestHandler = requestHandler;
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
 
 /** requestHandler
  * @desc A function that adds a token check to a generator function (returned)
@@ -35,15 +37,16 @@ function requestHandler(worker, _ref, _ref2) {
   var maxAttempts = 3; // The amount of time we wait between retries.
 
   var waitFor = 3000;
+
   var handler =
   /*#__PURE__*/
-  regeneratorRuntime.mark(function handler(attemptsLeft) {
+  _regenerator["default"].mark(function handler(attemptsLeft) {
     var _len,
         args,
         _key,
         _args = arguments;
 
-    return regeneratorRuntime.wrap(function handler$(_context) {
+    return _regenerator["default"].wrap(function handler$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
@@ -75,7 +78,7 @@ function requestHandler(worker, _ref, _ref2) {
             }
 
             _context.next = 13;
-            return put(_objectSpread({
+            return put((0, _objectSpread2["default"])({
               type: 'AUTHENTICATION_REFRESH_REQUESTED'
             }, _context.t0));
 
@@ -108,9 +111,9 @@ function requestHandler(worker, _ref, _ref2) {
             break;
 
           case 24:
-            console.warn(FAILED, _objectSpread({}, _context.t0));
+            console.warn(FAILED, (0, _objectSpread2["default"])({}, _context.t0));
             _context.next = 27;
-            return put(_objectSpread({
+            return put((0, _objectSpread2["default"])({
               type: FAILED
             }, _context.t0));
 
@@ -133,15 +136,16 @@ function requestHandler(worker, _ref, _ref2) {
     }, handler, null, [[1, 7, 27, 31]]);
   }); // Returns a generator function for watcher sagas to consume.
 
+
   return (
     /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee() {
+    _regenerator["default"].mark(function _callee() {
       var _len2,
           args,
           _key2,
           _args2 = arguments;
 
-      return regeneratorRuntime.wrap(function _callee$(_context2) {
+      return _regenerator["default"].wrap(function _callee$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:

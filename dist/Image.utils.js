@@ -1,9 +1,15 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Image = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
 var _every = _interopRequireDefault(require("lodash/every"));
 
@@ -12,14 +18,6 @@ var _isString = _interopRequireDefault(require("lodash/isString"));
 var _pickBy = _interopRequireDefault(require("lodash/pickBy"));
 
 var _assign = _interopRequireDefault(require("lodash/assign"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 /** Image
  * Image class offers methods useful for retrieving relevant
@@ -31,8 +29,7 @@ var Image =
 /*#__PURE__*/
 function () {
   function Image(profile) {
-    _classCallCheck(this, Image);
-
+    (0, _classCallCheck2["default"])(this, Image);
     this.profile = profile;
     this.url = this.url.bind(this);
     this.parameterize = this.parameterize.bind(this);
@@ -47,7 +44,7 @@ function () {
    */
 
 
-  _createClass(Image, [{
+  (0, _createClass2["default"])(Image, [{
     key: "url",
     value: function url() {
       var path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
@@ -160,7 +157,6 @@ function () {
       }
     }
   }]);
-
   return Image;
 }();
 

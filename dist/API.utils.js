@@ -1,17 +1,17 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.API = void 0;
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
 /** API
  * API class offers a set of methods to prepare various data
@@ -23,9 +23,8 @@ var API =
 /*#__PURE__*/
 function () {
   function API(profile) {
-    _classCallCheck(this, API);
-
-    if (!profile || _typeof(profile) !== 'object') throw new TypeError('Expected profile to be an object');
+    (0, _classCallCheck2["default"])(this, API);
+    if (!profile || (0, _typeof2["default"])(profile) !== 'object') throw new TypeError('Expected profile to be an object');
     this.profile = profile;
     this.extend = this.extend.bind(this);
     this.URIBuilder = this.URIBuilder.bind(this);
@@ -33,10 +32,10 @@ function () {
     this.getURL = this.getURL.bind(this);
   }
 
-  _createClass(API, [{
+  (0, _createClass2["default"])(API, [{
     key: "extend",
     value: function extend(profile) {
-      if (!profile || _typeof(profile) !== 'object') throw new TypeError('Expected profile to be an object');
+      if (!profile || (0, _typeof2["default"])(profile) !== 'object') throw new TypeError('Expected profile to be an object');
       this.profile = Object.assign({}, this.profile, profile);
     }
     /** URIBuilder
@@ -49,7 +48,7 @@ function () {
   }, {
     key: "URIBuilder",
     value: function URIBuilder(resource, config) {
-      if (typeof resource !== 'string' || _typeof(config) !== 'object') {
+      if (typeof resource !== 'string' || (0, _typeof2["default"])(config) !== 'object') {
         throw new TypeError('Invalid parameters');
       }
 
@@ -142,7 +141,6 @@ function () {
       return this.URIBuilder(resource, config) + path + params;
     }
   }]);
-
   return API;
 }();
 
