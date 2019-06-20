@@ -1,9 +1,9 @@
-import map from 'lodash/map';
-import every from 'lodash/every';
-import find from 'lodash/find';
+import map from "lodash/map";
+import every from "lodash/every";
+import find from "lodash/find";
 
 export class RequestError extends Error {
-  constructor({ name = 'XHR request error', message, code, devMessage }) {
+  constructor({ name = "XHR request error", message, code, devMessage }) {
     super();
     this.name = name;
     this.message = message;
@@ -19,29 +19,31 @@ export class CRUD {
   }
 
   create(url, payload) {
-    return this.xhr(url, payload, 'POST');
+    return this.xhr(url, payload, "POST");
   }
 
   read(url) {
-    return this.xhr(url, null, 'GET');
+    return this.xhr(url, null, "GET");
   }
 
   update(url, payload) {
-    return this.xhr(url, payload, 'PUT');
+    return this.xhr(url, payload, "PUT");
   }
 
   delete(url) {
-    return this.xhr(url, null, 'DELETE');
+    return this.xhr(url, null, "DELETE");
   }
 
   async xhr(url, body, verb) {
-    const conditionsResult = map(this.sideEffects.conditions, (fn) => {
-      return fn({ auth_token: this.axiosInstance.defaults.headers.common['Authorization'] });
+    const conditionsResult = map(this.sideEffects.conditions, fn => {
+      return fn({
+        auth_token: this.axiosInstance.defaults.headers.common["Authorization"]
+      });
     });
 
-    const allConditionsMet = every(conditionsResult, (res) => res.response);
+    const allConditionsMet = every(conditionsResult, res => res.response);
     if (!allConditionsMet) {
-      const unmetCondition = find(conditionsResult, (r) => !r.response);
+      const unmetCondition = find(conditionsResult, r => !r.response);
       throw new Error(`Condition unmet ${unmetCondition.msg}`);
     }
 
@@ -51,8 +53,12 @@ export class CRUD {
         url,
         data: body || null
       })
-      .then((response) => {
-        console.info(`${verb}:`, response.request.status, `-> ${response.request.responseURL}`);
+      .then(response => {
+        console.info(
+          `${verb}:`,
+          response.request.status,
+          `-> ${response.request.responseURL}`
+        );
         switch (response.status) {
           case 200: // OK
           case 201: // Created
@@ -67,7 +73,7 @@ export class CRUD {
             );
         }
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.response && error.response.data && error.request) {
           throw new RequestError({
             message: error.response.data.error,
@@ -75,9 +81,12 @@ export class CRUD {
             code: error.request.status
           });
         } else {
-          console.warn('Request response format invalid (could not create readable error)', {
-            ...error
-          });
+          console.warn(
+            "Request response format invalid (could not create readable error)",
+            {
+              ...error
+            }
+          );
         }
       });
   }
