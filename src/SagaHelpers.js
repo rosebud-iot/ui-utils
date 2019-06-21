@@ -15,7 +15,11 @@
    );
 */
 
-export function requestHandler(worker, { FAILED, COMPLETED }, { call, put, delay }) {
+exports.RequestHandler = function requestHandler(
+  worker,
+  { FAILED, COMPLETED },
+  { call, put, delay }
+) {
   // The amount of times we try a request before abandoning it.
   const maxAttempts = 3;
   // The amount of time we wait between retries.
@@ -29,7 +33,7 @@ export function requestHandler(worker, { FAILED, COMPLETED }, { call, put, delay
       if (e.code === 401) {
         // First time we perform a request that results in 401 -> request a new auth token
         if (attemptsLeft + 1 === maxAttempts) {
-          yield put({ type: 'AUTHENTICATION_REFRESH_REQUESTED', ...e });
+          yield put({ type: "AUTHENTICATION_REFRESH_REQUESTED", ...e });
         }
 
         // Try request again after a delay.
@@ -39,7 +43,7 @@ export function requestHandler(worker, { FAILED, COMPLETED }, { call, put, delay
           yield handler(attemptsLeft, ...args);
         } else {
           yield put({
-            type: 'REPEATED_REQUEST_ATTEMPTS_FAILED',
+            type: "REPEATED_REQUEST_ATTEMPTS_FAILED",
             message: `Error retrieving data (${maxAttempts} attempts). This can most likely be resolved by logging in again.`
           });
         }
@@ -56,4 +60,4 @@ export function requestHandler(worker, { FAILED, COMPLETED }, { call, put, delay
   return function*(...args) {
     yield handler(maxAttempts, ...args);
   };
-}
+};

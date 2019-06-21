@@ -2,7 +2,7 @@ import map from "lodash/map";
 import every from "lodash/every";
 import find from "lodash/find";
 
-export class RequestError extends Error {
+exports.RequestError = class RequestError extends Error {
   constructor({ name = "XHR request error", message, code, devMessage }) {
     super();
     this.name = name;
@@ -10,9 +10,9 @@ export class RequestError extends Error {
     this.code = code;
     this.devMessage = devMessage;
   }
-}
+};
 
-export class CRUD {
+exports.CRUD = class CRUD {
   constructor({ axiosInstance, sideEffects }) {
     this.axiosInstance = axiosInstance;
     this.sideEffects = sideEffects;
@@ -90,4 +90,4 @@ export class CRUD {
         }
       });
   }
-}
+};

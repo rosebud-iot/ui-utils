@@ -1,7 +1,7 @@
-import every from 'lodash/every';
-import isString from 'lodash/isString';
-import pickBy from 'lodash/pickBy';
-import assign from 'lodash/assign';
+import every from "lodash/every";
+import isString from "lodash/isString";
+import pickBy from "lodash/pickBy";
+import assign from "lodash/assign";
 
 /** Image
  * Image class offers methods useful for retrieving relevant
@@ -9,7 +9,7 @@ import assign from 'lodash/assign';
  * Instantiate with the correct profile (endpoints map for chosen environment)
  * @param {object} profile Map of endpoints that suits your environment.
  */
-export class Image {
+exports.Image = class Image {
   constructor(profile) {
     this.profile = profile;
     this.url = this.url.bind(this);
@@ -24,9 +24,9 @@ export class Image {
    * @param {string} [path] Path to be appended to URL.
    * @returns {string} Returns image URL, based on CMS configuration.
    */
-  url(path = '') {
+  url(path = "") {
     let o = this.profile;
-    return o.protocol + '://' + o.domain + o.port + o[path];
+    return o.protocol + "://" + o.domain + o.port + o[path];
   }
 
   /** parameterize, duplicated from API.utils
@@ -35,11 +35,11 @@ export class Image {
    * @returns {string} Returns the parameterized string.
    */
   parameterize(obj) {
-    let params = '?';
+    let params = "?";
     for (let key in obj) {
-      params.charAt(params.length - 1) === '?'
-        ? (params = params + key + '=' + obj[key])
-        : (params = params + '&' + key + '=' + obj[key]);
+      params.charAt(params.length - 1) === "?"
+        ? (params = params + key + "=" + obj[key])
+        : (params = params + "&" + key + "=" + obj[key]);
     }
     return params;
   }
@@ -52,10 +52,10 @@ export class Image {
    * @returns {object} Returns the structured JS object.
    */
   deParameterize(queryString) {
-    const ary = queryString.split('&');
+    const ary = queryString.split("&");
     let paramObj = {};
     for (let keyPair in ary) {
-      paramObj[ary[keyPair].split('=')[0]] = ary[keyPair].split('=')[1];
+      paramObj[ary[keyPair].split("=")[0]] = ary[keyPair].split("=")[1];
     }
     return paramObj;
   }
@@ -71,10 +71,12 @@ export class Image {
     try {
       const stringParams = pickBy(paramsObject, isString);
       if (!stringParams[requiredParam] && every(stringParams, isString)) {
-        throw new TypeError('Missing required params or wrong types');
+        throw new TypeError("Missing required params or wrong types");
       }
-      const p = this.parameterize(assign({ domain: imageDomain }, stringParams));
-      return `${this.url('images')}${p}`.replace(/\s/gi, '-').toLowerCase();
+      const p = this.parameterize(
+        assign({ domain: imageDomain }, stringParams)
+      );
+      return `${this.url("images")}${p}`.replace(/\s/gi, "-").toLowerCase();
     } catch (e) {
       console.warn(e);
     }
@@ -85,7 +87,7 @@ export class Image {
    * @returns {string} Returns URL to service image resource.
    */
   service(params) {
-    return this.imageUrlBuilder('service', 'category', params);
+    return this.imageUrlBuilder("service", "category", params);
   }
 
   /** device
@@ -93,7 +95,7 @@ export class Image {
    * @returns {string} Returns URL to service image resource.
    */
   device(params) {
-    return this.imageUrlBuilder('device', 'manufacturer', params);
+    return this.imageUrlBuilder("device", "manufacturer", params);
   }
 
   /** imageURLWithParams
@@ -102,14 +104,14 @@ export class Image {
    * @param {string} [type] Specifies the image type (thumbnail, square etc).
    * @returns {string} Returns URL to service image resource.
    */
-  imageURLWithParams(paramsString, type = 'thumbnail') {
+  imageURLWithParams(paramsString, type = "thumbnail") {
     try {
-      if (!paramsString || typeof paramsString !== 'string') {
-        throw new TypeError('Missing URL paramsString, empty or not a string');
+      if (!paramsString || typeof paramsString !== "string") {
+        throw new TypeError("Missing URL paramsString, empty or not a string");
       }
-      return `${this.url('images')}?${paramsString}&type=${type}`;
+      return `${this.url("images")}?${paramsString}&type=${type}`;
     } catch (e) {
       console.warn(e);
     }
   }
-}
+};

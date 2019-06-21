@@ -4,10 +4,10 @@
  * Instantiate with the correct profile (endpoints map for chosen environment)
  * @param {object} profile Map of endpoints that suits your environment.
  */
-export class API {
+exports.API = class API {
   constructor(profile) {
-    if (!profile || typeof profile !== 'object')
-      throw new TypeError('Expected profile to be an object');
+    if (!profile || typeof profile !== "object")
+      throw new TypeError("Expected profile to be an object");
     this.profile = profile;
 
     this.extend = this.extend.bind(this);
@@ -17,8 +17,8 @@ export class API {
   }
 
   extend(profile) {
-    if (!profile || typeof profile !== 'object')
-      throw new TypeError('Expected profile to be an object');
+    if (!profile || typeof profile !== "object")
+      throw new TypeError("Expected profile to be an object");
     this.profile = Object.assign({}, this.profile, profile);
   }
 
@@ -29,12 +29,12 @@ export class API {
    * @returns {string} Returns a URL.
    */
   URIBuilder(resource, config) {
-    if (typeof resource !== 'string' || typeof config !== 'object') {
-      throw new TypeError('Invalid parameters');
+    if (typeof resource !== "string" || typeof config !== "object") {
+      throw new TypeError("Invalid parameters");
     }
 
     const o = Object.assign({}, this.profile, config);
-    return o.protocol + '://' + o.domain + o.port + o[resource];
+    return o.protocol + "://" + o.domain + o.port + o[resource];
   }
 
   /** parseToken
@@ -43,8 +43,8 @@ export class API {
    * @returns {object} Returns JSON.
    */
   parseToken(token) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace('-', '+').replace('_', '/');
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
     return JSON.parse(window.atob(base64));
   }
 
@@ -70,12 +70,16 @@ export class API {
    * #=> '?name=Tyler&age=15&musician'
    */
   parameterize(obj) {
-    let prms = '?';
+    let prms = "?";
     for (let key in obj) {
-      if (prms.charAt(prms.length - 1) === '?') {
-        prms = obj[key] === 'undefined' ? prms + key : prms + key + '=' + obj[key];
+      if (prms.charAt(prms.length - 1) === "?") {
+        prms =
+          obj[key] === "undefined" ? prms + key : prms + key + "=" + obj[key];
       } else {
-        prms = obj[key] === 'undefined' ? prms + '&' + key : prms + '&' + key + '=' + obj[key];
+        prms =
+          obj[key] === "undefined"
+            ? prms + "&" + key
+            : prms + "&" + key + "=" + obj[key];
       }
     }
     return prms;
@@ -98,12 +102,12 @@ export class API {
    */
   getURL(resource, addendum = {}) {
     if (!resource) {
-      throw ReferenceError('Missing resource');
+      throw ReferenceError("Missing resource");
     }
-    const path = addendum.path ? addendum.path : '';
-    const params = addendum.params ? this.parameterize(addendum.params) : '';
+    const path = addendum.path ? addendum.path : "";
+    const params = addendum.params ? this.parameterize(addendum.params) : "";
     const config = addendum.config || {};
 
     return this.URIBuilder(resource, config) + path + params;
   }
-}
+};
