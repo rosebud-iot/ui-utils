@@ -15,7 +15,7 @@
    );
 */
 
-exports.RequestHandler = function requestHandler(
+exports.RequestHandler = function RequestHandler(
   worker,
   { FAILED, COMPLETED },
   { call, put, delay }

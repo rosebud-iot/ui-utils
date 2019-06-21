@@ -3,13 +3,13 @@ import isString from "lodash/isString";
 import pickBy from "lodash/pickBy";
 import assign from "lodash/assign";
 
-/** Image
- * Image class offers methods useful for retrieving relevant
+/** Utils
+ * Utils class offers methods useful for retrieving relevant
  * URIs to graphical assets managed by a CMS.
  * Instantiate with the correct profile (endpoints map for chosen environment)
  * @param {object} profile Map of endpoints that suits your environment.
  */
-exports.Image = class Image {
+exports.Utils = class Utils {
   constructor(profile) {
     this.profile = profile;
     this.url = this.url.bind(this);

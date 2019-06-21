@@ -1,10 +1,10 @@
-/** API
- * API class offers a set of methods to prepare various data
+/** Utils
+ * Utils class offers a set of methods to prepare various data
  * that you'd need when performing API calls.
  * Instantiate with the correct profile (endpoints map for chosen environment)
  * @param {object} profile Map of endpoints that suits your environment.
  */
-exports.API = class API {
+exports.Utils = class Utils {
   constructor(profile) {
     if (!profile || typeof profile !== "object")
       throw new TypeError("Expected profile to be an object");
