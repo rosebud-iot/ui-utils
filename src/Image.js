@@ -20,6 +20,12 @@ exports.Utils = class Utils {
     this.imageURLWithParams = this.imageURLWithParams.bind(this);
   }
 
+  extend(profile) {
+    if (!profile || typeof profile !== "object")
+      throw new TypeError("Expected profile to be an object");
+    this.profile = Object.assign({}, this.profile, profile);
+  }
+
   /** url
    * @param {string} [path] Path to be appended to URL.
    * @returns {string} Returns image URL, based on CMS configuration.
