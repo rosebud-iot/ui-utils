@@ -5,10 +5,8 @@ import { CRUD } from "../src/CRUD";
 
 const axiosStub = {
   request: sinon.stub(),
-  defaults: { headers: { common: { SWEEPR_TOKEN: "valid-token" } } }
+  defaults: { headers: { common: { Authorization: "Bearer ABC-valid-token" } } }
 };
-
-console.log("CRUD", CRUD);
 
 const crud = new CRUD({
   axiosInstance: axiosStub,
@@ -16,6 +14,10 @@ const crud = new CRUD({
 });
 
 describe("CRUD", () => {
+  afterEach(() => {
+    axiosStub.request.reset();
+  });
+
   it("should exist", () => {
     expect(CRUD).to.exist;
     expect(crud).to.exist;
@@ -78,7 +80,6 @@ describe("CRUD", () => {
   describe("XHR", () => {
     beforeEach(() => {
       sinon.stub(console, "info");
-      axiosStub.request.reset();
     });
 
     afterEach(() => {
@@ -108,24 +109,6 @@ describe("CRUD", () => {
           data: { a: 1 }
         })
       ).to.be.true;
-    });
-
-    it.skip("should properly handle error responses", () => {
-      const errorResponse = {
-        response: {
-          request: {
-            status: 404,
-            responseURL: "/response-url"
-          },
-          status: 404,
-          data: {
-            message: "The rule with ID '123' does not exists."
-          }
-        }
-      };
-
-      crud.xhr("/url", { a: 1 }, "GET");
-      expect(() => axiosStub.request.resolves(errorResponse)).to.throw(Error);
     });
 
     it.skip("should properly handle Axios request error results", () => {});

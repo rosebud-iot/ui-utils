@@ -83,12 +83,12 @@ exports.CRUD = class CRUD {
             code: error.request.status
           });
         } else {
-          console.warn(
-            "Request response format invalid (could not create readable error)",
-            {
-              ...error
-            }
-          );
+          console.warn("Error format invalid", {...error});
+          throw new RequestError({
+            message: 'Failed request',
+            devMessage: 'Failed request, see error code',
+            code: error.request.status
+          });
         }
       });
   }
