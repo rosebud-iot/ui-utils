@@ -24,8 +24,8 @@ exports.CRUD = class CRUD {
     return this.xhr(url, payload, "POST");
   }
 
-  read(url) {
-    return this.xhr(url, null, "GET");
+  read(url, responseType = "json") {
+    return this.xhr(url, null, "GET", responseType);
   }
 
   update(url, payload) {
@@ -36,7 +36,7 @@ exports.CRUD = class CRUD {
     return this.xhr(url, null, "DELETE");
   }
 
-  async xhr(url, body, verb) {
+  async xhr(url, body, verb, responseType = "json") {
     const conditionsResult = map(this.sideEffects.conditions, fn => {
       return fn({
         auth_token: this.axiosInstance.defaults.headers.common["Authorization"]
@@ -53,6 +53,7 @@ exports.CRUD = class CRUD {
       .request({
         method: verb,
         url,
+        responseType: responseType,
         data: body || null
       })
       .then(response => {
@@ -67,7 +68,11 @@ exports.CRUD = class CRUD {
           case 202: // Accepted
           case 203: // Non-Authoritative Information
           case 204: // No content
-            return response.data;
+            if (responseType === "blob") {
+              return response;
+            } else {
+              return response.data;
+            }
 
           default:
             throw new RangeError(
@@ -83,10 +88,10 @@ exports.CRUD = class CRUD {
             code: error.request.status
           });
         } else {
-          console.warn("Error format invalid", {...error});
+          console.warn("Error format invalid", { ...error });
           throw new RequestError({
-            message: 'Failed request',
-            devMessage: 'Failed request, see error code',
+            message: "Failed request",
+            devMessage: "Failed request, see error code",
             code: error.request.status
           });
         }

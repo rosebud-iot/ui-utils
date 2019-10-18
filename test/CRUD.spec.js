@@ -65,6 +65,11 @@ describe("CRUD", () => {
       expect(crud.xhr.withArgs("/test", null, "GET").calledOnce).to.be.true;
     });
 
+    it("should call XHR from READ with correct params and responseType", () => {
+      crud.read("/test","blob");
+      expect(crud.xhr.withArgs("/test", null, "GET", "blob").calledOnce).to.be.true;
+    });
+
     it("should call XHR from UPDATE with correct params", () => {
       crud.update("/test", { a: 1 });
       expect(crud.xhr.withArgs("/test", { a: 1 }, "PUT").calledOnce).to.be.true;
@@ -106,6 +111,7 @@ describe("CRUD", () => {
         axiosStub.request.calledOnceWith({
           method: "GET",
           url: "/url",
+          responseType: "json",
           data: { a: 1 }
         })
       ).to.be.true;
