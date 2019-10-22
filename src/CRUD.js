@@ -24,8 +24,8 @@ exports.CRUD = class CRUD {
     return this.xhr(url, payload, "POST");
   }
 
-  read(url, responseType = "json") {
-    return this.xhr(url, null, "GET", responseType);
+  read(url) {
+    return this.xhr(url, null, "GET");
   }
 
   update(url, payload) {
@@ -36,7 +36,7 @@ exports.CRUD = class CRUD {
     return this.xhr(url, null, "DELETE");
   }
 
-  async xhr(url, body, verb, responseType = "json") {
+  async xhr(url, body, verb, requestConfig = {}) {
     const conditionsResult = map(this.sideEffects.conditions, fn => {
       return fn({
         auth_token: this.axiosInstance.defaults.headers.common["Authorization"]
@@ -53,8 +53,8 @@ exports.CRUD = class CRUD {
       .request({
         method: verb,
         url,
-        responseType: responseType,
-        data: body || null
+        data: body || null,
+        ...requestConfig
       })
       .then(response => {
         console.info(
@@ -68,7 +68,7 @@ exports.CRUD = class CRUD {
           case 202: // Accepted
           case 203: // Non-Authoritative Information
           case 204: // No content
-            if (responseType === "blob") {
+            if (requestConfig.responseType === "blob") {
               return response;
             } else {
               return response.data;
