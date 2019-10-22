@@ -75,11 +75,6 @@ describe("CRUD", () => {
       expect(crud.xhr.withArgs("/test/11", null, "DELETE").calledOnce).to.be
         .true;
     });
-
-    it("should call XHR from XHR with correct params and responseType", () => {
-      crud.xhr("/test",null,"GET",{responseType: 'blob'});
-      expect(crud.xhr.withArgs("/test", null, "GET", {responseType: 'blob'}).calledOnce).to.be.true;
-    });
   });
 
   describe("XHR", () => {
@@ -112,6 +107,30 @@ describe("CRUD", () => {
           method: "GET",
           url: "/url",
           data: { a: 1 }
+        })
+      ).to.be.true;
+    });
+
+    it("should call XHR from XHR with correct params and responseType", () => {
+      const resp = {
+        request: {
+          status: 200,
+          responseURL: "/response-url"
+        },
+        status: 200,
+        data: {}
+      };
+      axiosStub.request.resolves(resp);
+      expect(axiosStub.request.called).to.be.false;
+
+      crud.xhr("/url", null, "GET", { responseType: "blob" });
+      expect(axiosStub.request.calledOnce).to.be.true;
+      expect(
+        axiosStub.request.calledOnceWith({
+          method: "GET",
+          url: "/url",
+          data: null,
+          responseType: "blob"
         })
       ).to.be.true;
     });
