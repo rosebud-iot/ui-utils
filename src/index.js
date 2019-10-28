@@ -18,6 +18,3 @@ exports.CRUD = CRUD;
 
 var Saga = require("./Saga");
 exports.Saga = Saga;
-
-var String = require("./String");
-exports.String = String;
