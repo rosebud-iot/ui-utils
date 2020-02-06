@@ -3,12 +3,11 @@ import every from "lodash/every";
 import find from "lodash/find";
 
 class RequestError extends Error {
-  constructor({ name = "XHR request error", message, code, devMessage }) {
+  constructor({ name = "XHR request error", code, message }) {
     super();
     this.name = name;
-    this.message = message;
     this.code = code;
-    this.devMessage = devMessage;
+    this.message = message;
   }
 }
 
@@ -81,18 +80,16 @@ exports.CRUD = class CRUD {
         }
       })
       .catch(error => {
-        if (error.response && error.response.data && error.request) {
+        if (error.response && error.response.data) {
           throw new RequestError({
-            message: error.response.data.error,
-            devMessage: error.response.data.error_description,
-            code: error.request.status
+            code: error.response.data.code,
+            message: error.response.data.message
           });
         } else {
           console.warn("Error format invalid", { ...error });
           throw new RequestError({
-            message: "Failed request",
-            devMessage: "Failed request, see error code",
-            code: error.request.status
+            code: error.request.status,
+            message: "Failed request"
           });
         }
       });
