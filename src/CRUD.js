@@ -56,11 +56,6 @@ exports.CRUD = class CRUD {
         ...requestConfig
       })
       .then(response => {
-        console.info(
-          `${verb}:`,
-          response.request.status,
-          `-> ${response.request.responseURL}`
-        );
         switch (response.status) {
           case 200: // OK
           case 201: // Created
