@@ -3,11 +3,21 @@ import every from "lodash/every";
 import find from "lodash/find";
 
 class RequestError extends Error {
-  constructor({ name = "XHR request error", code, message }) {
+  constructor({
+    name = "XHR request error",
+    error,
+    error_description,
+    code,
+    message,
+    status
+  }) {
     super();
     this.name = name;
+    this.error = error;
+    this.error_description = error_description;
     this.code = code;
     this.message = message;
+    this.status = status;
   }
 }
 
@@ -75,18 +85,40 @@ exports.CRUD = class CRUD {
         }
       })
       .catch(error => {
-        if (error.response && error.response.data) {
-          throw new RequestError({
-            code: error.response.data.code,
-            message: error.response.data.message
-          });
-        } else {
-          console.warn("Error format invalid", { ...error });
-          throw new RequestError({
-            code: error.request.status,
-            message: "Failed request"
-          });
-        }
+        const _error =
+          error.response && error.response.data && error.response.data.error
+            ? error.response.data.error
+            : null;
+
+        const error_description =
+          error.response &&
+          error.response.data &&
+          error.response.data.error_description
+            ? error.response.data.error_description
+            : null;
+
+        const code =
+          error.response && error.response.data && error.response.data.code
+            ? error.response.data.code
+            : null;
+
+        const message =
+          error.response && error.response.data && error.response.data.message
+            ? error.response.data.message
+            : null;
+
+        const status =
+          error.response && error.response.status
+            ? error.response.status
+            : null;
+
+        throw new RequestError({
+          error: _error,
+          error_description,
+          code,
+          message,
+          status
+        });
       });
   }
 };

@@ -30,7 +30,7 @@ exports.RequestHandler = function RequestHandler(
       attemptsLeft--;
       yield call(worker, ...args);
     } catch (e) {
-      if (e.code === 401) {
+      if (e.status === 401) {
         // First time we perform a request that results in 401 -> request a new auth token
         if (attemptsLeft + 1 === maxAttempts) {
           yield put({ type: "AUTHENTICATION_REFRESH_REQUESTED", ...e });
