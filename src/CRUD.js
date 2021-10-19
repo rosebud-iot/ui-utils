@@ -1,7 +1,3 @@
-import map from "lodash/map";
-import every from "lodash/every";
-import find from "lodash/find";
-
 class RequestError extends Error {
   constructor({
     name = "XHR request error",
@@ -9,7 +5,7 @@ class RequestError extends Error {
     error_description,
     code,
     message,
-    status
+    status,
   }) {
     super();
     this.name = name;
@@ -24,9 +20,8 @@ class RequestError extends Error {
 exports.RequestError = RequestError;
 
 exports.CRUD = class CRUD {
-  constructor({ axiosInstance, sideEffects }) {
+  constructor({ axiosInstance }) {
     this.axiosInstance = axiosInstance;
-    this.sideEffects = sideEffects;
   }
 
   create(url, payload) {
@@ -46,37 +41,23 @@ exports.CRUD = class CRUD {
   }
 
   async xhr(url, body, verb, requestConfig = {}) {
-    const conditionsResult = map(this.sideEffects.conditions, fn => {
-      return fn({
-        auth_token: this.axiosInstance.defaults.headers.common["Authorization"]
-      });
-    });
-
-    const allConditionsMet = every(conditionsResult, res => res.response);
-    if (!allConditionsMet) {
-      const unmetCondition = find(conditionsResult, r => !r.response);
-      throw new Error(`Condition unmet ${unmetCondition.msg}`);
-    }
-
     return this.axiosInstance
       .request({
         method: verb,
         url,
         data: body || null,
-        ...requestConfig
+        ...requestConfig,
       })
-      .then(response => {
+      .then((response) => {
         switch (response.status) {
           case 200: // OK
           case 201: // Created
           case 202: // Accepted
           case 203: // Non-Authoritative Information
           case 204: // No content
-            if (requestConfig.responseType === "blob") {
-              return response;
-            } else {
-              return response.data;
-            }
+            // TODO: handle in interceptor instead
+            if (requestConfig.responseType === "blob") return response;
+            return response.data;
 
           default:
             throw new RangeError(
@@ -84,7 +65,8 @@ exports.CRUD = class CRUD {
             );
         }
       })
-      .catch(error => {
+      .catch((error) => {
+        // TODO: This kind of error handling should be done in an interceptor instead
         const _error =
           error.response && error.response.data && error.response.data.error
             ? error.response.data.error
@@ -117,7 +99,7 @@ exports.CRUD = class CRUD {
           error_description,
           code,
           message,
-          status
+          status,
         });
       });
   }
