@@ -2,18 +2,22 @@ class RequestError extends Error {
   constructor({
     name = "XHR request error",
     error,
-    error_description,
-    code,
     message,
+    data,
     status,
+    headers,
+    request,
+    config,
   }) {
     super();
     this.name = name;
     this.error = error;
-    this.error_description = error_description;
-    this.code = code;
     this.message = message;
+    this.data = data;
     this.status = status;
+    this.headers = headers;
+    this.request = request;
+    this.config = config;
   }
 }
 
@@ -66,41 +70,29 @@ exports.CRUD = class CRUD {
         }
       })
       .catch((error) => {
-        // TODO: This kind of error handling should be done in an interceptor instead
-        const _error =
-          error.response && error.response.data && error.response.data.error
-            ? error.response.data.error
-            : null;
+        let config = { error };
+        if (error.response) {
+          config = Object.assign(config, {
+            message: `Request error, server responded with a status code that falls out of range of 2xx (${error.response.status})`,
+            data: error.response.data,
+            status: error.response.status,
+            headers: error.response.headers,
+          });
+        } else if (error.request) {
+          config = Object.assign(config, {
+            message: `Request error, no response was received`,
+            request: error.request,
+          });
+        } else {
+          config = Object.assign(config, {
+            message: `Request error, error was triggered when setting up the request`,
+            message2: error.message,
+          });
+          throw new RequestError(config);
+        }
 
-        const error_description =
-          error.response &&
-          error.response.data &&
-          error.response.data.error_description
-            ? error.response.data.error_description
-            : null;
-
-        const code =
-          error.response && error.response.data && error.response.data.code
-            ? error.response.data.code
-            : null;
-
-        const message =
-          error.response && error.response.data && error.response.data.message
-            ? error.response.data.message
-            : null;
-
-        const status =
-          error.response && error.response.status
-            ? error.response.status
-            : null;
-
-        throw new RequestError({
-          error: _error,
-          error_description,
-          code,
-          message,
-          status,
-        });
+        config = Object.assign(config, { config: error.config });
+        throw new RequestError(config);
       });
   }
 };
