@@ -1,6 +1,6 @@
 {
   "name": "ui-utils",
-  "version": "1.8.1",
+  "version": "1.9.2",
   "description": "Utility library shared across React platforms",
   "main": "lib/index.js",
   "peerDependencies": {
