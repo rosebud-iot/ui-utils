@@ -70,7 +70,7 @@ exports.CRUD = class CRUD {
         }
       })
       .catch((error) => {
-        let config = { error };
+        let config = { data: error.data, error: error.error };
         if (error.response) {
           config = Object.assign(config, {
             message: `Request error, server responded with a status code that falls out of range of 2xx (${error.response.status})`,
@@ -88,10 +88,8 @@ exports.CRUD = class CRUD {
             message: `Request error, error was triggered when setting up the request`,
             message2: error.message,
           });
-          throw new RequestError(config);
         }
 
-        config = Object.assign(config, { config: error.config });
         throw new RequestError(config);
       });
   }
