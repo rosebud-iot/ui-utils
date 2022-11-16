@@ -89,8 +89,8 @@ exports.CRUD = class CRUD {
             message2: error.message,
           });
         }
-
-        throw new RequestError(config);
+        const errResp = JSON.stringify(new RequestError(config));
+        throw JSON.parse(errResp);
       });
   }
 };
