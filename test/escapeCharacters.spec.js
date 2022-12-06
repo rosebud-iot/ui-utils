@@ -41,4 +41,64 @@ describe("escapeCharacters", () => {
       b: { c: "O'Reilly" }
     });
   });
+
+  it("should preserve field in nested object", () => {
+    expect(
+      escapeCharacters(
+        { a: "Thomas O'Malley", b: { c: "O'Reilly" } },
+        false,
+        ['c']
+      )
+    ).to.eql({ a: "Thomas O&apos;Malley", b: { c: "O'Reilly" } });
+  });
+
+  it("should preserve nested object in array", () => {
+    expect(
+      escapeCharacters(
+        { a: "Mee'p", b: "Moo'p", c: [1, { d: "Maa'p" }] },
+        false,
+        ['d']
+      )
+    ).to.eql({ a: "Mee&apos;p", b: "Moo&apos;p", c: [1, { d: "Maa'p" }] });
+  });
+
+  it("should preserve entire array", () => {
+    expect(
+      escapeCharacters(
+        { a: "Mee'p", b: "Moo'p", c: [1, { d: "Maa'p" }] },
+        false,
+        ['c']
+      )
+    ).to.eql({ a: "Mee&apos;p", b: "Moo&apos;p", c: [1, { d: "Maa'p" }] });
+  });
+
+  it("should preserve irregular, multiple fields", () => {
+    expect(
+      escapeCharacters(
+        { a: "Mee'p", b: "Moo'p", c: [1, { d: "Maa'p" }], e: "Muu'p" },
+        false,
+        ['a', 'e']
+      )
+    ).to.eql({ a: "Mee'p", b: "Moo&apos;p", c: [1, { d: "Maa&apos;p" }], e: "Muu'p" });
+  });
+
+  it("should reverse escaping, but preserve escapes in nested object in array", () => {
+    expect(
+      escapeCharacters(
+        { a: "Mee&apos;p", b: "Moo&apos;p", c: [1, { d: "Maa&apos;p" }] },
+        true,
+        ['d']
+      )
+    ).to.eql({ a: "Mee'p", b: "Moo'p", c: [1, { d: "Maa&apos;p" }] });
+  });
+
+  it("should preserve fields with the same name", () => {
+    expect(
+      escapeCharacters(
+        { a: "Mee'p", b: "Moo'p", c: [1, { d: "Maa'p", a: "Muu'p" }] },
+        false,
+        ['a']
+      )
+    ).to.eql({ a: "Mee'p", b: "Moo&apos;p", c: [1, { d: "Maa&apos;p", a: "Muu'p" }] });
+  });
 });
