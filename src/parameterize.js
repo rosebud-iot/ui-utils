@@ -1,5 +1,5 @@
 import assign from "lodash/assign";
-import deParameterize from "./deParameterize.js";
+import deParameterize from "./deParameterize";
 
 /**
  * Converts an object to a parameter string, appropriate for URLs.

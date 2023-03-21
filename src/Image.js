@@ -2,6 +2,7 @@ import every from "lodash/every";
 import isString from "lodash/isString";
 import pickBy from "lodash/pickBy";
 import assign from "lodash/assign";
+import parameterize from "./parameterize";
 
 /** Utils
  * Utils class offers methods useful for retrieving relevant
@@ -13,10 +14,7 @@ exports.Utils = class Utils {
   constructor(profile) {
     this.profile = profile;
     this.url = this.url.bind(this);
-    this.parameterize = this.parameterize.bind(this);
     this.imageUrlBuilder = this.imageUrlBuilder.bind(this);
-    this.service = this.service.bind(this);
-    this.device = this.device.bind(this);
     this.imageURLWithParams = this.imageURLWithParams.bind(this);
   }
 
@@ -35,37 +33,6 @@ exports.Utils = class Utils {
     return o.protocol + "://" + o.domain + o.port + o[path];
   }
 
-  /** parameterize, duplicated from API.utils
-   * Parameterizes an object into a string suitable for URLs.
-   * @param {object} obj The object to parameterize.
-   * @returns {string} Returns the parameterized string.
-   */
-  parameterize(obj) {
-    let params = "?";
-    for (let key in obj) {
-      params.charAt(params.length - 1) === "?"
-        ? (params = params + key + "=" + obj[key])
-        : (params = params + "&" + key + "=" + obj[key]);
-    }
-    return params;
-  }
-
-  /** deParameterize
-   * @param {string} queryString A string query to structure.
-   * @example
-   * deParameterize('category=music&artist=B.Dylan&instrument=guitar')
-   * #=> { category: 'music', artist: 'B.Dylan', instrument: 'guitar' }
-   * @returns {object} Returns the structured JS object.
-   */
-  deParameterize(queryString) {
-    const ary = queryString.split("&");
-    let paramObj = {};
-    for (let keyPair in ary) {
-      paramObj[ary[keyPair].split("=")[0]] = ary[keyPair].split("=")[1];
-    }
-    return paramObj;
-  }
-
   /** imageUrlBuilder
    * @param {string} imageDomain The domain that corresponds to devices or services.
    * @param {string} requiredParam Critical param required to have the possibility to
@@ -79,29 +46,11 @@ exports.Utils = class Utils {
       if (!stringParams[requiredParam] && every(stringParams, isString)) {
         throw new TypeError("Missing required params or wrong types");
       }
-      const p = this.parameterize(
-        assign({ domain: imageDomain }, stringParams)
-      );
+      const p = parameterize(assign({ domain: imageDomain }, stringParams));
       return `${this.url("images")}${p}`.replace(/\s/gi, "-").toLowerCase();
     } catch (e) {
       console.warn(e);
     }
-  }
-
-  /** service
-   * @param {object} params Service params used to fetch the corresponding image.
-   * @returns {string} Returns URL to service image resource.
-   */
-  service(params) {
-    return this.imageUrlBuilder("service", "category", params);
-  }
-
-  /** device
-   * @param {object} params Device params used to fetch the corresponding image.
-   * @returns {string} Returns URL to service image resource.
-   */
-  device(params) {
-    return this.imageUrlBuilder("device", "manufacturer", params);
   }
 
   /** imageURLWithParams
