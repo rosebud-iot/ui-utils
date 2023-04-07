@@ -1,3 +1,5 @@
+import parameterize from "./parameterize";
+
 /** Utils
  * Utils class offers a set of methods to prepare various data
  * that you'd need when performing API calls.
@@ -55,7 +57,7 @@ exports.Utils = class Utils {
       throw ReferenceError("Missing resource");
     }
     const path = addendum.path ? addendum.path : "";
-    const params = addendum.params ? this.parameterize(addendum.params) : "";
+    const params = addendum.params ? parameterize(addendum.params) : "";
     const config = addendum.config || {};
 
     return this.URIBuilder(resource, config) + path + params;
