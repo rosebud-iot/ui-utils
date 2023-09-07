@@ -2,6 +2,7 @@ import map from 'lodash/map';
 import isArray from 'lodash/isArray';
 import isObject from 'lodash/isObject';
 import isString from 'lodash/isString';
+import isEmpty from 'lodash/isEmpty';
 import forOwn from 'lodash/forOwn';
 import isFunction from 'lodash/isFunction';
 import some from 'lodash/some';
@@ -66,21 +67,27 @@ export const escapeCharacters = (val, reverse = false, exclude = []) => {
         : itm
     );
 
-  const escObj = (o) => {
-    let _o = {};
-    forOwn(o, (v, k) => {
-      _o[k] = some(exclude, (field) => field === k)
-        ? v
-        : isArray(v)
-        ? escAry(v)
-        : isObject(v)
-        ? escObj(v)
-        : isString(v)
-        ? escChars(v, reverse)
-        : v;
-    });
-    return _o;
-  };
+    const escObj = (o) => {
+      return isEmpty(o)
+        ? o
+        : (() => {
+            let _o = {};
+            forOwn(o, (v, k) => {
+              _o[k] = some(exclude, (field) => field === k)
+                ? v
+                : isArray(v)
+                ? escAry(v)
+                : v instanceof Date
+                ? new Date(v)
+                : isObject(v)
+                ? escObj(v)
+                : isString(v)
+                ? escChars(v, reverse)
+                : v;
+            });
+            return _o;
+          })();
+    };  
 
   return isArray(val)
     ? escAry(val)
