@@ -42,6 +42,21 @@ describe("escapeCharacters", () => {
     });
   });
 
+  it("should return the expected date object", () => {
+		const dateObj = new Date();
+		const input = { value: dateObj };
+		const result = escapeCharacters(input);
+
+		expect(result.value).to.be.an.instanceof(Date);
+		expect(dateObj.getTime()).to.equal(result.value.getTime());
+	});
+
+  it('should return the same empty object instance when passed an empty object', function() {
+    const emptyObject = {};
+
+    expect(escapeCharacters(emptyObject)).to.eq(emptyObject);
+  });
+
   it("should preserve field in nested object", () => {
     expect(
       escapeCharacters(
