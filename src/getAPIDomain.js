@@ -21,12 +21,12 @@
  * getAPIDomain('localhost:3000', 'api', 'qa');
  * #=> 'api.qa.sweepr.com'
  */
-const getAPIDomain = (host, prefix, dev = "mobile") => {
+const getAPIDomain = (host = window.location.host, prefix, dev = "mobile") => {
   if (/localhost/g.test(host)) return `${prefix}.${dev}.sweepr.com`;
-  let h = host.split(".");
-  h.splice(0, 1);
-  h = h.join(".");
-  return `${prefix}.${h}`;
+
+  const [, ...segments] = host.split(".");
+
+  return `${prefix}.${segments.join(".")}`;
 };
 
 export default getAPIDomain;
