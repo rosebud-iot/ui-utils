@@ -1,4 +1,4 @@
-import { OEMBED_PROVIDERS } from "./constants";
+import OEMBED_PROVIDERS from "./constants";
 
 /**
  * Convert a simple glob pattern (with `*` wildcards) into a RegExp that
