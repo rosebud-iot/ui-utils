@@ -1,0 +1,1 @@
+import type from"./type";const typeErrorHandler=(typesWhiteList,received)=>{throw new Error(`Invalid type. Expected ${typesWhiteList.join(" or ")} but received ${type(received)}`)};export default typeErrorHandler;

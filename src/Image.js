@@ -1,8 +1,8 @@
-import every from "lodash/every";
-import isString from "lodash/isString";
-import pickBy from "lodash/pickBy";
-import assign from "lodash/assign";
-import parameterize from "./parameterize";
+import every from 'lodash/every';
+import isString from 'lodash/isString';
+import pickBy from 'lodash/pickBy';
+import assign from 'lodash/assign';
+import parameterize from './parameterize';
 
 /** Utils
  * Utils class offers methods useful for retrieving relevant
@@ -10,7 +10,7 @@ import parameterize from "./parameterize";
  * Instantiate with the correct profile (endpoints map for chosen environment)
  * @param {object} profile Map of endpoints that suits your environment.
  */
-exports.Utils = class Utils {
+export class Utils {
   constructor(profile) {
     this.profile = profile;
     this.url = this.url.bind(this);
@@ -19,8 +19,8 @@ exports.Utils = class Utils {
   }
 
   extend(profile) {
-    if (!profile || typeof profile !== "object")
-      throw new TypeError("Expected profile to be an object");
+    if (!profile || typeof profile !== 'object')
+      throw new TypeError('Expected profile to be an object');
     this.profile = Object.assign({}, this.profile, profile);
   }
 
@@ -28,9 +28,9 @@ exports.Utils = class Utils {
    * @param {string} [path] Path to be appended to URL.
    * @returns {string} Returns image URL, based on CMS configuration.
    */
-  url(path = "") {
+  url(path = '') {
     let o = this.profile;
-    return o.protocol + "://" + o.domain + o.port + o[path];
+    return o.protocol + '://' + o.domain + o.port + o[path];
   }
 
   /** imageUrlBuilder
@@ -44,10 +44,10 @@ exports.Utils = class Utils {
     try {
       const stringParams = pickBy(paramsObject, isString);
       if (!stringParams[requiredParam] && every(stringParams, isString)) {
-        throw new TypeError("Missing required params or wrong types");
+        throw new TypeError('Missing required params or wrong types');
       }
       const p = parameterize(assign({ domain: imageDomain }, stringParams));
-      return `${this.url("images")}${p}`.replace(/\s/gi, "-").toLowerCase();
+      return `${this.url('images')}${p}`.replace(/\s/gi, '-').toLowerCase();
     } catch (e) {
       console.warn(e);
     }
@@ -59,14 +59,14 @@ exports.Utils = class Utils {
    * @param {string} [type] Specifies the image type (thumbnail, square etc).
    * @returns {string} Returns URL to service image resource.
    */
-  imageURLWithParams(paramsString, type = "thumbnail") {
+  imageURLWithParams(paramsString, type = 'thumbnail') {
     try {
-      if (!paramsString || typeof paramsString !== "string") {
-        throw new TypeError("Missing URL paramsString, empty or not a string");
+      if (!paramsString || typeof paramsString !== 'string') {
+        throw new TypeError('Missing URL paramsString, empty or not a string');
       }
-      return `${this.url("images")}?${paramsString}&type=${type}`;
+      return `${this.url('images')}?${paramsString}&type=${type}`;
     } catch (e) {
       console.warn(e);
     }
   }
-};
+}

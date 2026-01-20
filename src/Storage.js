@@ -3,7 +3,7 @@ const { host } = window.location;
 /** CookieStorage
  * @description Utility library for using cookies both in development and prod.
  */
-exports.CookieStorage = class CookieStorage {
+export class CookieStorage {
   /**
    * setup
    * @description Prepares given cookies library for usage.
@@ -12,9 +12,9 @@ exports.CookieStorage = class CookieStorage {
    */
   static setup(cookies) {
     try {
-      cookies.defaults = { path: "/", domain: this.domain };
+      cookies.defaults = { path: '/', domain: this.domain };
     } catch (e) {
-      console.warn("Cookie setup error", e);
+      console.warn('Cookie setup error', e);
     }
   }
 
@@ -23,7 +23,7 @@ exports.CookieStorage = class CookieStorage {
    * @returns {string} Returns current domain, usable when managing cookies.
    */
   static get domain() {
-    if (/localhost/g.test(host)) return "localhost";
+    if (/localhost/g.test(host)) return 'localhost';
     return host;
   }
-};
+}

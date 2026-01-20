@@ -1,4 +1,30 @@
 {
-  "presets": ["@babel/preset-env"],
-  "plugins": ["@babel/transform-runtime"]
+  "presets": [
+    ["@babel/preset-env", {
+      "modules": false
+    }]
+  ],
+  "plugins": [
+    ["@babel/transform-runtime", {
+      "useESModules": true
+    }]
+  ],
+  "env": {
+    "cjs": {
+      "presets": [
+        "@babel/preset-env"
+      ],
+      "plugins": [
+        "@babel/transform-runtime"
+      ]
+    },
+    "test": {
+      "presets": [
+        "@babel/preset-env"
+      ],
+      "plugins": [
+        "@babel/transform-runtime"
+      ]
+    }
+  }
 }

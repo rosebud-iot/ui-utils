@@ -1,0 +1,1 @@
+const{host}=window.location;export class CookieStorage{static setup(cookies){try{cookies.defaults={path:"/",domain:this.domain}}catch(e){console.warn("Cookie setup error",e)}}static get domain(){if(/localhost/g.test(host))return"localhost";return host}}

@@ -1,0 +1,1 @@
+const isLocalHost=function(){let host=arguments.length>0&&arguments[0]!==undefined?arguments[0]:window.location.host;return /localhost/g.test(host)};export default isLocalHost;

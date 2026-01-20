@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:true});exports.default=void 0;const isLocalHost=function(){let host=arguments.length>0&&arguments[0]!==undefined?arguments[0]:window.location.host;return /localhost/g.test(host)};var _default=exports.default=isLocalHost;

@@ -1,0 +1,1 @@
+const setLocationHost=function(){let host=arguments.length>0&&arguments[0]!==undefined?arguments[0]:"localhost";Object.defineProperty(window,"location",{value:{host},writable:true})};export default setLocationHost;

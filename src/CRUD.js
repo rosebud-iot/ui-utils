@@ -1,6 +1,6 @@
 class RequestError extends Error {
   constructor({
-    name = "XHR request error",
+    name = 'XHR request error',
     error,
     message,
     data,
@@ -21,27 +21,27 @@ class RequestError extends Error {
   }
 }
 
-exports.RequestError = RequestError;
+export { RequestError };
 
-exports.CRUD = class CRUD {
+export class CRUD {
   constructor({ axiosInstance }) {
     this.axiosInstance = axiosInstance;
   }
 
   create(url, payload) {
-    return this.xhr(url, payload, "POST");
+    return this.xhr(url, payload, 'POST');
   }
 
   read(url) {
-    return this.xhr(url, null, "GET");
+    return this.xhr(url, null, 'GET');
   }
 
   update(url, payload) {
-    return this.xhr(url, payload, "PUT");
+    return this.xhr(url, payload, 'PUT');
   }
 
   delete(url) {
-    return this.xhr(url, null, "DELETE");
+    return this.xhr(url, null, 'DELETE');
   }
 
   async xhr(url, body, verb, requestConfig = {}) {
@@ -60,12 +60,12 @@ exports.CRUD = class CRUD {
           case 203: // Non-Authoritative Information
           case 204: // No content
             // TODO: handle in interceptor instead
-            if (requestConfig.responseType === "blob") return response;
+            if (requestConfig.responseType === 'blob') return response;
             return response.data;
 
           default:
             throw new RangeError(
-              `Unhandled response ${response.status}, not within accepted range`
+              `Unhandled response ${response.status}, not within accepted range`,
             );
         }
       })
@@ -93,4 +93,4 @@ exports.CRUD = class CRUD {
         throw JSON.parse(errResp);
       });
   }
-};
+}

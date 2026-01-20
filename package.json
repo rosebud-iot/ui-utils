@@ -1,8 +1,10 @@
 {
   "name": "ui-utils",
-  "version": "2.5.1",
-  "description": "Utility library shared across React platforms",
-  "main": "lib/index.js",
+  "version": "2.8.6",
+  "description": "Utility library for browsers",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "type": "commonjs",
   "peerDependencies": {
     "lodash": "^4.17.21"
   },
@@ -17,16 +19,17 @@
     "sinon": "^15.0.3"
   },
   "scripts": {
-    "test": "mocha --require @babel/register",
-    "build": "babel src -d lib --presets=@babel/preset-env"
+    "test": "NODE_ENV=test mocha --require @babel/register",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "BABEL_ENV=cjs npx babel src -d dist --minified --no-comments",
+    "build:esm": "BABEL_ENV=esm npx babel src -d dist --out-file-extension .mjs --minified --no-comments"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rosebud-iot/ui-utils.git"
   },
   "keywords": [
-    "utility",
-    "react"
+    "utility"
   ],
   "author": "André Drougge",
   "license": "ISC",

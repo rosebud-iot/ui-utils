@@ -1,11 +1,4 @@
-var Image = require("./Image");
-exports.Image = Image;
-
-var API = require("./API");
-exports.API = API;
-
-var Storage = require("./Storage");
-exports.Storage = Storage;
-
-var CRUD = require("./CRUD").CRUD;
-exports.CRUD = CRUD;
+export { Utils as Image } from './Image';
+export { Utils as API } from './API';
+export { CookieStorage as Storage } from './Storage';
+export { CRUD } from './CRUD';

@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:true});exports.default=void 0;const type=obj=>{if(typeof obj==="function")return"function";return Object.prototype.toString.call(obj).slice(8,-1).toLowerCase()};var _default=exports.default=type;
