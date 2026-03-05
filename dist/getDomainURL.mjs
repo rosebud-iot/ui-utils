@@ -1,1 +1,1 @@
-import getAPIDomain from"./getAPIDomain";export const getDomainURL=_ref=>{let{protocol,host,prefix,dev}=_ref;return`${protocol}://${getAPIDomain(host,prefix,dev)}`};export default getDomainURL;
+import getAPIDomain from"./getAPIDomain.mjs";const getDomainURL=_ref=>{let{protocol,host,prefix,dev}=_ref;return`${protocol}://${getAPIDomain(host,prefix,dev)}`};export default getDomainURL;

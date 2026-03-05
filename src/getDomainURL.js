@@ -1,4 +1,4 @@
-import getAPIDomain from "./getAPIDomain";
+import getAPIDomain from './getAPIDomain';
 
 /**
  * getDomainURL
@@ -16,7 +16,7 @@ import getAPIDomain from "./getAPIDomain";
  * getAPIDomain({protocol: 'https', host: 'admin.sweepr.com', prefix: 'api'});
  * #=> 'https://api.sweepr.com'
  */
-export const getDomainURL = ({ protocol, host, prefix, dev }) =>
+const getDomainURL = ({ protocol, host, prefix, dev }) =>
   `${protocol}://${getAPIDomain(host, prefix, dev)}`;
 
 export default getDomainURL;

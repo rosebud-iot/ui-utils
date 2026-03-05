@@ -15,14 +15,14 @@
  * fileName
  * #=> myFile.zip
  */
-export const extractFileName = (payload, filename = "download") => {
+const extractFileName = (payload, filename = 'download') => {
   try {
     const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-    const disposition = payload.headers["content-disposition"];
+    const disposition = payload.headers['content-disposition'];
     const matches = filenameRegex.exec(disposition);
-    filename = matches[1].replace(/['"]/g, "");
+    filename = matches[1].replace(/['"]/g, '');
   } catch (e) {
-    console.warn("Could not retrieve filename from payload", payload);
+    console.warn('Could not retrieve filename from payload', payload);
   }
   return filename;
 };

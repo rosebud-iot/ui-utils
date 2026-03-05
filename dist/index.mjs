@@ -1,1 +1,1 @@
-export{Utils as Image}from"./Image";export{Utils as API}from"./API";export{CookieStorage as Storage}from"./Storage";export{CRUD}from"./CRUD";
+export*as Image from"./Image.mjs";export*as API from"./API.mjs";export{CookieStorage as Storage}from"./Storage.mjs";export{CRUD}from"./CRUD.mjs";
